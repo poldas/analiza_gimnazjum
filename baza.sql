@@ -109,31 +109,31 @@ insert into uczen_zadanie values('A1', 22, 1, 6);
 
 
 CREATE TABLE `obszar_umiejetnosc` (
-  `id` int(5) unsigned AUTO_INCREMENT,
+  `id` int(5) unsigned,
   `obszar` varchar(3),
   `umiejetnosc` VARCHAR(5),
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-insert into obszar_umiejetnosc values(null, 'I', '1.2');
-insert into obszar_umiejetnosc values(null, 'I', 'p');
-insert into obszar_umiejetnosc values(null, 'I', '1.7');
-insert into obszar_umiejetnosc values(null, 'I', '3.2');
-insert into obszar_umiejetnosc values(null, 'I', '1.11');
-insert into obszar_umiejetnosc values(null, 'I', '2.10');
-insert into obszar_umiejetnosc values(null, 'I', '3.3');
-insert into obszar_umiejetnosc values(null, 'I', '3.9');
-insert into obszar_umiejetnosc values(null, 'II', 'p');
-insert into obszar_umiejetnosc values(null, 'II', '2.2');
-insert into obszar_umiejetnosc values(null, 'II', '3.1');
-insert into obszar_umiejetnosc values(null, 'II', '3.2');
-insert into obszar_umiejetnosc values(null, 'III', '2.3');
-insert into obszar_umiejetnosc values(null, 'III', '2.1');
-insert into obszar_umiejetnosc values(null, 'III', '3t');
-insert into obszar_umiejetnosc values(null, 'III', '3s');
-insert into obszar_umiejetnosc values(null, 'III', '3st');
-insert into obszar_umiejetnosc values(null, 'III', '3j');
-insert into obszar_umiejetnosc values(null, 'III', '3o');
-insert into obszar_umiejetnosc values(null, 'III', 'p');
+insert into obszar_umiejetnosc values(1, 'I', '1.2');
+insert into obszar_umiejetnosc values(2, 'I', 'p');
+insert into obszar_umiejetnosc values(3, 'I', '1.7');
+insert into obszar_umiejetnosc values(4, 'I', '3.2');
+insert into obszar_umiejetnosc values(5, 'I', '1.11');
+insert into obszar_umiejetnosc values(6, 'I', '2.10');
+insert into obszar_umiejetnosc values(7, 'I', '3.3');
+insert into obszar_umiejetnosc values(8, 'I', '3.9');
+insert into obszar_umiejetnosc values(9, 'II', 'p');
+insert into obszar_umiejetnosc values(10, 'II', '2.2');
+insert into obszar_umiejetnosc values(11, 'II', '3.1');
+insert into obszar_umiejetnosc values(12, 'II', '3.2');
+insert into obszar_umiejetnosc values(13, 'III', '2.3');
+insert into obszar_umiejetnosc values(14, 'III', '2.1');
+insert into obszar_umiejetnosc values(15, 'III', '3t');
+insert into obszar_umiejetnosc values(16, 'III', '3s');
+insert into obszar_umiejetnosc values(17, 'III', '3st');
+insert into obszar_umiejetnosc values(18, 'III', '3j');
+insert into obszar_umiejetnosc values(19, 'III', '3o');
+insert into obszar_umiejetnosc values(20, 'III', 'p');
 
 CREATE TABLE `zadanie_obszar_umie` (
   `numer_zadania` int(10),
@@ -179,3 +179,37 @@ insert into zadanie_obszar_umie values(22, 17, 3);
 insert into zadanie_obszar_umie values(22, 18, 4);
 insert into zadanie_obszar_umie values(22, 19, 5);
 insert into zadanie_obszar_umie values(22, 20, 6);
+
+
+
+mysql> select * from zadanie limit 1;
++---------------+---------+------------+
+| numer_zadania | max_pkt | podzadanie |
++---------------+---------+------------+
+|             1 |       1 |          1 |
++---------------+---------+------------+
+1 row in set (0.00 sec)
+
+mysql> select * from uczen limit 1;
++-----+------------+------+-------+-------+----------------+
+| kod | typ_miasta | plec | klasa | numer | rodzaj_choroby |
++-----+------------+------+-------+-------+----------------+
+| A1  | miasto     | m    | A     |     1 |              1 |
++-----+------------+------+-------+-------+----------------+
+1 row in set (0.00 sec)
+
+mysql> select * from uczen_zadanie limit 1;
++------------+---------------+--------+------------+
+| kod_ucznia | numer_zadania | punkty | podzadanie |
++------------+---------------+--------+------------+
+| A1         |             1 |      1 |          1 |
++------------+---------------+--------+------------+
+1 row in set (0.00 sec)
+
+mysql> select * from obszar_umiejetnosc limit 1;
++----+--------+-------------+
+| id | obszar | umiejetnosc |
++----+--------+-------------+
+|  1 | I      | 1.2         |
++----+--------+-------------+
+1 row in set (0.00 sec)
