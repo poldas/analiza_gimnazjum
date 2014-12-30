@@ -393,24 +393,23 @@ INSERT INTO zadanie_obszar_umie VALUES (22, 20, 6);
 
 
 
-# średnia punktów per zadanie dla wszystkich uczniow
+# średnia punktów per zadanie dla wszystkich uczniow (latwosc zadania w szkole)
 SELECT
   sum(uz.punkty) / sum(z.max_pkt) AS latwosc,
-  z.numer_zadania,
-  uz.podzadanie
-FROM uczen_zadanie AS uz LEFT JOIN zadanie AS z ON z.numer_zadania = uz.numer_zadania AND z.podzadanie = uz.podzadanie
-GROUP BY uz.numer_zadania, uz.podzadanie;
+  z.numer_zadania
+FROM uczen_zadanie AS uz LEFT JOIN zadanie AS z ON z.numer_zadania = uz.numer_zadania
+GROUP BY uz.numer_zadania ORDER BY CAST(z.numer_zadania as signed), z.numer_zadania;
 
 
-# średnia punktów per zadanie dla wszystkich uczniow per klasa
+# średnia punktów per zadanie dla wszystkich uczniow per klasa (latwosc zadania per klasa)
 SELECT
   u.klasa,
   sum(uz.punkty) / sum(z.max_pkt) AS latwosc,
-  z.numer_zadania,
-  uz.podzadanie
-FROM uczen_zadanie AS uz LEFT JOIN zadanie AS z ON z.numer_zadania = uz.numer_zadania AND z.podzadanie = uz.podzadanie
+  z.numer_zadania
+FROM uczen_zadanie AS uz LEFT JOIN zadanie AS z ON z.numer_zadania = uz.numer_zadania
   LEFT JOIN uczen AS u ON u.kod = uz.kod_ucznia
-GROUP BY u.klasa, uz.numer_zadania, uz.podzadanie;
+GROUP BY u.klasa, uz.numer_zadania ORDER BY u.klasa, CAST(z.numer_zadania as signed), z.numer_zadania;
+
 
 # latwosc testu calego per klasa
 SELECT
@@ -424,19 +423,10 @@ GROUP BY u.klasa;
 # srednia punktow per klasa
 SELECT
   u.klasa,
-  sum(uz.punkty) / count(DISTINCT u.numer) AS latwosc
+  sum(uz.punkty) / count(DISTINCT u.numer) AS srednia, count(DISTINCT u.numer) AS liczba_uczniow, sum(uz.punkty) AS suma_punkow
 FROM uczen_zadanie AS uz LEFT JOIN zadanie AS z ON z.numer_zadania = uz.numer_zadania AND z.podzadanie = uz.podzadanie
   LEFT JOIN uczen AS u ON u.kod = uz.kod_ucznia
 GROUP BY u.klasa;
-
-
-# latwosc zadan w szkole per zadanie
-SELECT
-  z.numer_zadania,
-  z.podzadanie,
-  sum(uz.punkty) / sum(z.max_pkt) AS latwosc
-FROM uczen_zadanie AS uz LEFT JOIN zadanie AS z ON z.numer_zadania = uz.numer_zadania AND z.podzadanie = uz.podzadanie
-GROUP BY z.numer_zadania, z.podzadanie;
 
 
 # latwosc per obszar, umiejetnosc, klasa
@@ -444,6 +434,8 @@ SELECT ou.obszar,ou.umiejetnosc, u.klasa,sum(uz.punkty)/sum(z.max_pkt) AS latwos
 FROM obszar_umiejetnosc as ou LEFT JOIN zadanie_obszar_umie AS zou ON zou.id_obszar_umiej = ou.id
   LEFT JOIN uczen_zadanie AS uz ON uz.numer_zadania = zou.numer_zadania
   LEFT JOIN zadanie AS z ON z.numer_zadania = zou.numer_zadania
-  LEFT JOIN uczen AS u ON u.kod = uz.kod_ucznia GROUP BY ou.obszar,ou.umiejetnosc, u.klasa;
+  LEFT JOIN uczen AS u ON u.kod = uz.kod_ucznia
+  GROUP BY ou.obszar,ou.umiejetnosc, u.klasa
+  ORDER BY ou.obszar, CAST(ou.umiejetnosc as signed), ou.umiejetnosc, u.klasa;
 
 
