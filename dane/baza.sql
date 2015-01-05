@@ -430,7 +430,7 @@ GROUP BY u.klasa;
 
 
 # latwosc per obszar, umiejetnosc, klasa
-SELECT ou.obszar,ou.umiejetnosc, u.klasa,sum(uz.punkty)/sum(z.max_pkt) AS latwosc
+SELECT ou.obszar, ou.umiejetnosc, u.klasa,sum(uz.punkty)/sum(z.max_pkt) AS latwosc
 FROM obszar_umiejetnosc as ou LEFT JOIN zadanie_obszar_umie AS zou ON zou.id_obszar_umiej = ou.id
   LEFT JOIN uczen_zadanie AS uz ON uz.numer_zadania = zou.numer_zadania
   LEFT JOIN zadanie AS z ON z.numer_zadania = zou.numer_zadania

@@ -9,8 +9,16 @@ requirejs.config({
     paths: {
         lib: '../lib',
         jquery: '../lib/jquery-2.1.3.min',
-        underscore: '../lib/underscorejs-1.7.0.min'
+        async : '../lib/async',
+        goog : '../lib/goog',
+        propertyParser : '../lib/propertyParser',
+        underscore: '../lib/underscorejs-1.7.0.min',
+        latwoscSzkola: 'charts/latwoscSzkola',
+        latwoscKlasa: 'charts/latwoscKlasa',
+        sredniaPktKlasa: 'charts/sredniaPktKlasa',
+        latwoscObszar: 'charts/latwoscObszar',
+        spreadsheetChart: 'charts/spreadsheet'
     }
 });
 
-require(['analiza']);
+require(['router']);
