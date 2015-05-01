@@ -1,0 +1,22 @@
+{
+  "name": "analiza",
+  "version": "0.0.0",
+  "homepage": "https://github.com/poldas/analiza_gimnazjum",
+  "description": "analiza testów",
+  "main": "main.js",
+  "moduleType": [
+    "amd"
+  ],
+  "authors": [
+    "Poldas"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "lib",
+    "test",
+    "tests"
+  ]
+}

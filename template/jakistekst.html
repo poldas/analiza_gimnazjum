@@ -1,0 +1,42 @@
+Portability
+
+One of the main benefits of RIAs is the portability of compiled code between different browsers, operating systems, and platforms. Similarly, using a single source codebase, or similar codebases, reduces the time and cost of development and maintenance, while still providing platform flexibility. 
+
+Consider the following guidelines when designing for portability:
+Design for the goal of “write once, run everywhere,” but be willing to fork code in cases where overall project complexity or feature tradeoffs dictate that you do so.
+When comparing an RIA and a Web application, consider that differences between browsers can require extensive testing of ASP.NET and JavaScript code. With an RIA application, the plug-in creator, and not the developer, is responsible for consistency across different platforms.
+If your audience will be running the RIA on multiple platforms, do not use features available only on one platform; for example, Windows Integrated Authentication. Design a solution based on standards that are portable across different clients.
+When possible, use richer development languages that are supported for both rich clients and RIAs. See the Technology considerations in this section for recommendations.
+Make full use of the native RIA code libraries.
+Presentation
+
+RIA applications work best when designed as one central interface. Multi-page UIs require that you consider how you will link between pages. Positioning of elements on a page can affect both the look and performance of your RIA application. 
+
+Consider the following guidelines when designing for presentation:
+To avoid anti-aliasing issues that can cause fuzziness in RIAs, snap UI components to whole pixels. Pay attention to centering and math-based positioning routines. Consider writing a routine that checks for fractional pixels and rounds them to the nearest whole pixel value.
+Trap the browser’s forward and back button events to avoid unintentional navigation away from your page.
+For multi-page UIs, use deep-linking methods to allow unique identification of and navigation to individual application pages.
+For multi-page UIs, consider the ability to manipulate the browser’s address text box content, history list, and back and forward buttons in order to implement normal Web page–like navigation.
+State Management
+
+You can store application state on the client by using isolated storage if the state changes frequently. If application state is vital at start-up, synchronize the client state to the server. 
+
+Consider the following guidelines when designing for state management:
+Store state on the client in isolated storage to persist it during and between sessions.
+Store the client state on the server if loss of state on the client would be catastrophic to the application’s function. Consider that isolated storage is deleted when the browser cache is cleared.
+Store the client state on the server if the client requires recovery of application state when using different accounts, or when running on other hardware installations
+Verify the stored state between the client and server at start-up, and intelligently handle the case when they are out of synchronization.
+Design for multiple concurrent sessions because you cannot prevent multiple RIA instances from initializing. Design either for concurrency in your state management, or to detect and prevent multiple sessions from corrupting application state.
+Validation
+
+Validation must be performed using code on the client or through services located on the server. If you require more than trivial validation on the client, isolate validation logic in a separate downloadable assembly. This makes the rules easy to maintain. 
+
+Consider the following guidelines when designing for validation:
+Use client-side validation to maximize the user experience, and server-side validation for security. Use isolated storage to hold client-specific validation rules.
+In general, assume that all client-controlled data is malicious. The server should re-validate all data sent to it. Design to validate input from all sources, such as the query string, cookies, and HTML controls.
+Design to constrain, reject, and sanitize data. Validate input for length, range, format, and type.
+For rules that require access to server resources, evaluate whether it is more efficient to use a single service call that performs validation on the server.
+If you have a large volume of client-side validation code that may change, consider locating it in a separate downloadable module so it can be easily replaced without downloading the entire RIA application again.
+Performance Considerations
+
+Properly using the client-side processing power for an RIA is one significant way to maximize performance. Server-side optimizations similar to those used for Web applications are also a major factor. 

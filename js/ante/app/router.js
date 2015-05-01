@@ -2,7 +2,7 @@ define(['jquery', 'underscore', 'latwoscSzkola', 'latwoscKlasa', 'sredniaPktKlas
     function ($, _, latwoscSzkola, latwoscKlasa, sredniaPktKlasa, latwoscObszar, spreadsheet) {
 
         spreadsheet.start();
-        //sredniaPktKlasa.start();
+        sredniaPktKlasa.start();
         latwoscSzkola.start();
         latwoscKlasa.start();
         latwoscObszar.start();
