@@ -40,6 +40,9 @@ class GeneratorBuilder {
 	public function pobierz_sql() {
 		return $this->generator_automatyczny->pobierz_zapytanie_sql();
 	}
+	public function pobierz_dane() {
+	    return $this->generator_automatyczny->pobierz_dane();
+	}
 	public function drukuj_sql() {
 		print_r($this->pobierz_sql());
 	}

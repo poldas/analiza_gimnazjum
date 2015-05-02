@@ -1,4 +1,16 @@
-<?php include("php/ante/generatory/DBconnect.php"); ?>
+<?php
+ini_set('display_errors','1');
+function autoloader($nazwa_klasy) {
+    if (file_exists('php/ante/generatory/'.$nazwa_klasy.'.php'))
+        require('php/ante/generatory/'.$nazwa_klasy.'.php');
+    if (file_exists('php/ante/logika/'.$nazwa_klasy.'.php')){
+        require('php/ante/logika/'.$nazwa_klasy.'.php');
+    }
+}
+spl_autoload_register('autoloader');
+
+$analiza = new AnalizaDanych();
+?>
 <!doctype html>
 <html>
 <head>
@@ -39,11 +51,11 @@
 								<h1>Wykres sumy</h1>
 								<p class="lead">
 
-
 								<div class="container" id="wykres-content">
 									<div id="chart_div" style="width: auto; height: 500px;"></div>
 								</div>
 								</p>
+								php/ante/wykresy.php
 							</div>
 						</div>
 
@@ -164,6 +176,7 @@
           ['I',  660,       1120],
           ['J',  660,       1120]
         ]);
+        var data = new google.visualization.DataTable(<?php echo $analiza->pobierz_dane_json();?>);
         var options = {
           title: 'Company Performance'
         };

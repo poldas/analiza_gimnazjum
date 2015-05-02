@@ -40,6 +40,9 @@ class GeneratorWynikow {
 	}
 
 	public function pobierz_dane() {
+	    if(!$this->dane){
+	        $this->ustaw_dane_ze_zrodla_danych();
+	    }
 		return $this->dane;
 	}
 
@@ -76,7 +79,7 @@ class GeneratorWynikow {
 					return;
 				}
 				// przygotowanie pojedynczego wpisu kolejność jest istotna
-				$klasa = substr($kod_ucznia, 0, 1); // zostawia pierwszy znak, nazwe klasy np. 'A'
+				$klasa = substr($kod_ucznia, 0, 1); // $wynikzostawia pierwszy znak, nazwe klasy np. 'A'
 				array_push($dane_do_inserta, "'".$klasa."'");
 				array_push($dane_do_inserta, "'".$kod_ucznia."'");
 				array_push($dane_do_inserta, $nr_zadania);
@@ -91,9 +94,6 @@ class GeneratorWynikow {
 		// zapytanie końcowe sql
 		$dane  = join(',', $dane_zapytania_sql);
 		$sql = $dane ? "INSERT INTO ".$this->nazwa_wyniki_egzaminu." VALUES ".$dane.";" : '';
-		$sql .="Update ".$this->nazwa_wyniki_egzaminu." set max_punktow = 1;";
-		$sql .="Update ".$this->nazwa_wyniki_egzaminu." set max_punktow = 2 where numer_zadania in(21,25);";
-		$sql .="Update ".$this->nazwa_wyniki_egzaminu." set max_punktow = 4 where numer_zadania in(22);";
 
 		$this->zapytanie_sql = $sql;
 		return $sql;
