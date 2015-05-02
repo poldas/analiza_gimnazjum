@@ -19,12 +19,14 @@ class GeneratorBuilder {
 		$this->generator_automatyczny = new GeneratorWynikow();
 		return $this;
 	}
+
 	protected function ustaw_dbhandler() {
 		$this->dbhandler = DBconnect::connect();
 		return $this;
 	}
-	protected function ustaw_zrodlo_danych($dane) {
-		$this->generator_automatyczny->ustaw_zrodlo_danych($dane);
+
+	protected function ustaw_zrodlo_danych($zrodlo_danych) {
+		$this->generator_automatyczny->ustaw_zrodlo_danych($zrodlo_danych);
 		return $this;
 	}
 

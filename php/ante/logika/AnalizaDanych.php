@@ -3,13 +3,20 @@ class AnalizaDanych {
 
 	const SZKOLA = 'szkola';
 	const ZAPYTANIE_WSZYSTKO = "select u.nr_ucznia,u.plec,u.dysleksja,we.klasa,we.kod_ucznia,we.nr_zadania,we.liczba_punktow,we.max_punktow,zu.nazwa_umiejetnosci,uk.umiejetnosc from wyniki_egzaminu as we left join zadanie_umiejetnosc as zu on we.nr_zadania=zu.numer_zadania left join umiejetnosc_kategoria as uk on uk.kategoria=zu.nazwa_umiejetnosci left join uczniowie as u on u.kod_ucznia=we.kod_ucznia order by we.kod_ucznia, u.nr_ucznia";
-	const ZAPYTANIE_SREDNIA = "select sum(we.liczba_punktow) as suma_punktow, we.klasa
+	const ZAPYTANIE_SUMA = "select sum(we.liczba_punktow) as suma_punktow, we.klasa, we.nr_zadania
 	        from wyniki_egzaminu as we
 	        left join zadanie_umiejetnosc as zu on we.nr_zadania=zu.numer_zadania
 	        left join umiejetnosc_kategoria as uk on uk.kategoria=zu.nazwa_umiejetnosci
 	        left join uczniowie as u on u.kod_ucznia=we.kod_ucznia
-	        group by we.klasa
-	        order by we.klasa";
+	        group by we.nr_zadania, we.klasa
+	        order by we.klasa, we.nr_zadania";
+	const ZAPYTANIE_SREDNIA = "select avg(we.liczba_punktow) as srednia_punktow, we.klasa, we.nr_zadania, we.max_punktow
+	        from wyniki_egzaminu as we
+	        left join zadanie_umiejetnosc as zu on we.nr_zadania=zu.numer_zadania
+	        left join umiejetnosc_kategoria as uk on uk.kategoria=zu.nazwa_umiejetnosci
+	        left join uczniowie as u on u.kod_ucznia=we.kod_ucznia
+	        group by we.nr_zadania, we.klasa
+	        order by we.klasa, we.nr_zadania";
 	private $dane = array();
 	private $dbhandler = null;
 
@@ -37,8 +44,8 @@ class AnalizaDanych {
 	    $this->dane[self::KLASA] = $this->pobierz_srednia_klasa();
 	}
 
-	private function pobierz_srednia_szkola() {
-        return $this->pobierz_dane_db($sql)
+	private function pobierz_srednia_szkola($sql = '') {
+        return $this->pobierz_dane_db($sql);
 	}
 
 	private function pobierz_srednia_klasa() {
