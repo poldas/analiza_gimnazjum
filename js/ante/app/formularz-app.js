@@ -47,4 +47,4 @@ UserTracker.addInitializer(function(){
 	UserTracker.list.show(new UsersView({collection: UserTracker.users}));
 });
 
-UserTracker.start();
+//UserTracker.start();

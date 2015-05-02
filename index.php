@@ -1,15 +1,15 @@
 <?php
-ini_set('display_errors','1');
+ini_set ( 'display_errors', '1' );
 function autoloader($nazwa_klasy) {
-    if (file_exists('php/ante/generatory/'.$nazwa_klasy.'.php'))
-        require('php/ante/generatory/'.$nazwa_klasy.'.php');
-    if (file_exists('php/ante/logika/'.$nazwa_klasy.'.php')){
-        require('php/ante/logika/'.$nazwa_klasy.'.php');
+    if (file_exists ( 'php/ante/generatory/' . $nazwa_klasy . '.php' ))
+        require ('php/ante/generatory/' . $nazwa_klasy . '.php');
+    if (file_exists ( 'php/ante/logika/' . $nazwa_klasy . '.php' )) {
+        require ('php/ante/logika/' . $nazwa_klasy . '.php');
     }
 }
-spl_autoload_register('autoloader');
+spl_autoload_register ( 'autoloader' );
 
-$analiza = new AnalizaDanych();
+$analiza = new AnalizaDanych ();
 ?>
 <!doctype html>
 <html>
@@ -46,16 +46,16 @@ $analiza = new AnalizaDanych();
 			<div class="row">
 				<div class="container">
 					<div class="row">
-						<div class="col-lg-8">
+						<div class="col-lg-12">
 							<div class="jumbotron">
 								<h1>Wykres sumy</h1>
 								<p class="lead">
+
 
 								<div class="container" id="wykres-content">
 									<div id="chart_div" style="width: auto; height: 500px;"></div>
 								</div>
 								</p>
-								php/ante/wykresy.php
 							</div>
 						</div>
 
@@ -160,29 +160,48 @@ $analiza = new AnalizaDanych();
 
 	<script type="text/javascript" src="https://www.google.com/jsapi"></script>
 	<script type="text/javascript">
-      google.load('visualization', '1', {packages:['corechart']});
+      google.load('visualization', '1.1', {packages:['corechart','bar']});
       google.setOnLoadCallback(drawChart);
 
       function drawChart() {
-        var data = google.visualization.arrayToDataTable([
-          ['klasa', 'Suma punktów', 'Średnia punktów'],
-          ['A',  1000,      400],
-          ['B',  1170,      460],
-          ['C',  660,       1120],
-          ['D',  1030,      540],
-          ['F',  660,       1120],
-          ['G',  660,       1120],
-          ['H',  660,       1120],
-          ['I',  660,       1120],
-          ['J',  660,       1120]
-        ]);
-        var data = new google.visualization.DataTable(<?php echo $analiza->pobierz_dane_json();?>);
-        var options = {
-          title: 'Company Performance'
-        };
-        var chart = new google.visualization.ColumnChart(document.getElementById('chart_div'));
+    	  var chart = new google.charts.Bar(document.getElementById('chart_div'));
+        options_suma_srednia = {
+                width: 900,
+                chart: {
+                  title: 'Wykres sumy i średniej punktów w klasie',
+                  subtitle: 'Średnia i suma'
+                },
+                series: {
+                  0: { axis: 'srednia', targetAxis: 0}, // Bind series 0 to an axis named 'distance'.
+                  1: { axis: 'suma',targetAxis: 0 }, // Bind series 1 to an axis named 'brightness'.
+                  2: { axis: 'suma',targetAxis: 1 }
+                },
+                axes: {
+                  y: {
+                	  srednia: {label: 'Średnia'}, // Left y-axis.
+                	  suma: {side: 'right', label: 'Suma punktów'} // Right y-axis.
+                  }
+                }
+              };
 
-        chart.draw(data, options);
+        var jsonData = $.ajax({
+            url: "php/ante/dane.php",
+            dataType: "json",
+            async: false
+        }).responseText;
+
+        var data = new google.visualization.DataTable(jsonData);
+        function selectHandler() {
+            var selectedItem = chart.getSelection()[0];
+            if (selectedItem) {
+              var topping = data.getValue(selectedItem.row, 0);
+              var value = data.getValue(selectedItem.row, 1);
+              console.log(data.getValue(selectedItem.row,2));
+              console.log('The user selected ' + topping + ' with value:' + value);
+            }
+          }
+        chart.draw(data, options_suma_srednia);
+          google.visualization.events.addListener(chart, 'select', selectHandler);
       }
     </script>
 </body>
