@@ -9,7 +9,6 @@ function autoloader($nazwa_klasy) {
 }
 spl_autoload_register ( 'autoloader' );
 
-$analiza = new AnalizaDanych ();
 ?>
 <!doctype html>
 <html>
@@ -18,115 +17,83 @@ $analiza = new AnalizaDanych ();
 <title>Analiza Testów ANTE</title>
 <!-- Latest compiled and minified CSS -->
 <link rel="stylesheet"
-	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
-
+    href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
 <!-- Optional theme -->
 <link rel="stylesheet"
-	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap-theme.min.css">
-
+    href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap-theme.min.css">
 <link rel="stylesheet" href="main.css">
 </head>
 <body>
-		<?php include 'template/navigation_bar.html';?>
-		<div class="row">
-		<div class="container">
-			<div id="app-container">
-				<div id="header-region"></div>
-				<div id="main-region" class="container">
-					<p>Here is static content in the web page. You'll notice that it
-						gets replaced by our app as soon as we start it.</p>
-				</div>
-
-				<div id="dialog-region"></div>
-			</div>
-		</div>
-	</div>
-	<div class="row">
-		<div class="container" id="formModule">
-			<div class="row">
-				<div class="container">
-					<div class="row">
-						<div class="col-lg-12">
-							<div class="jumbotron">
-								<h1>Wykres sumy</h1>
-								<p class="lead">
-
-
-								<div class="container" id="wykres-content">
-									<div id="chart_div" style="width: auto; height: 500px;"></div>
-								</div>
-								</p>
-							</div>
-						</div>
-
-						<div class="col-lg-4">
-							<section id="wykres-list"></section>
-						</div>
-					</div>
-				</div>
-			</div>
-			<div class="row">
-				<div class="col-lg-8" id="content">
-					<div class="jumbotron" id="formView">
-						<h2>New User</h2>
-						<div class="container">
-							<form class="navbar-form navbar-left" role="search">
-								<div class="form-group">
-									<input type="text" id="name" class="form-control"
-										placeholder="Nazwisko"> <input type="text" id="age"
-										class="form-control" placeholder="Wiek">
-								</div>
-								<button type="submit" class="btn btn-lg btn-success">Create</button>
-								<button class="btn btn-lg btn-success close">Close</button>
-							</form>
-						</div>
-					</div>
-				</div>
-
-				<div class="col-lg-4" id="lista"></div>
-			</div>
-		</div>
-	</div>
-	<div class="row">
-		<div class="container">
-			<div class="row">
-				<div class="col-lg-8">
-					<div class="jumbotron">
-						<h1>Formularz app</h1>
-						<p class="lead">
+    <div id="app-contentr">
+        <div id="header-region">
+        <?php include 'template/navigation_bar.html';?>
+      </div>
+        <div class="row" data-app="layout-app">
+            <div class="container">
+                <div id="main-region" class="container">
+                    main region
+                    <p>Here is static content in the web page. You'll
+                        notice that it gets replaced by our app as soon
+                        as we start it.</p>
+                </div>
+                <div id="dialog-region">dialog region</div>
+            </div>
+        </div>
+        koniec
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="container" id="wykres-content">
+                    <div id="chart_div"
+                        style="width: auto; height: 500px;">wykres</div>
+                </div>
+                </p>
+            </div>
+        </div>
+        <!-- Footer -->
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8">
+                    <div class="blog-footer">
+                        <p>Copywrite &copy; <?php echo date("Y") ?></p>
+                    </div>
+                </div>
+            </div>
+            <!-- /.row -->
+        </div>
+        <!-- /.container -->
+        <div id="dialog-region"></div>
+    </div>
 
 
-						<div class="container" id="form"></div>
-						</p>
-					</div>
-				</div>
 
-				<div class="col-lg-4">
-					<section id="list"></section>
-				</div>
-			</div>
-		</div>
-	</div>
+    <div id="content"></div>
 
-	<!-- Footer -->
-	<div class="container">
-		<div class="row">
-			<div class="col-lg-8">
-				<div class="blog-footer">
-					<p>Copywrite &copy; <?php echo date("Y") ?></p>
-				</div>
-			</div>
-		</div>
-		<!-- /.row -->
-	</div>
-	<!-- /.container -->
-	<!-- <script type="text/javascript" src="js/ante/lib/require.js" data-main="js/ante/anteconfig"></script> -->
-	<script type="text/javascript">
-    var DANE = {};
+
+
+
+
+    <script type="text/template" id="app-layout">
+<div class="container">
+            <div class="row" id="one-row">
+                <div class="col-lg-8">
+                    <div class="blog-footer">
+                        <p>Copywrite &copy; <?php echo date("Y") ?></p>
+                    </div>
+                </div>
+            </div>
+
+ <div class="row" id="second-row">
+                <div class="col-lg-8">
+                    <div class="blog-footer">
+                        <p>Copywrite &copy; <?php echo date("Y") ?></p>
+                    </div>
+                </div>
+            </div>
+            <!-- /.row -->
+        </div>
 </script>
 
-
-	<script type="text/template" id="formView">
+    <script type="text/template" id="formView">
     <h2>New User </h2>
 <form class="navbar-form navbar-left" role="search">
   <div class="form-group">
@@ -136,32 +103,46 @@ $analiza = new AnalizaDanych ();
   <button type="submit" class="btn btn-lg btn-success">Create</button>
 </form>
 </script>
-	<script type="text/template" id="userView">
+    <script type="text/template" id="userView">
     <h2>nazwa <%= name %> Age: <%= age %></h2>
 </script>
-	<script type="text/template" id="usersView">
+    <script type="text/template" id="usersView">
     <h2> Users </h2>
 </script>
-	<script type="text/template" id="nousersView">
+    <script type="text/template" id="nousersView">
     <h2>No Users </h2>
 </script>
 
-	<script type="text/javascript"
-		src="https://code.jquery.com/jquery-2.1.3.min.js"></script>
-	<script type="text/javascript"
-		src="js/ante/lib/underscorejs-1.7.0.min.js"></script>
-	<script type="text/javascript" src="js/ante/lib/backbone-min.js"></script>
-	<script type="text/javascript"
-		src="js/ante/lib/backbone.marionette.min.js"></script>
-	<script type="text/javascript" src="js/wykresy/app.js"></script>
-	<!-- Latest compiled and minified JavaScript -->
-	<script
-		src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
 
-	<script type="text/javascript" src="https://www.google.com/jsapi"></script>
-	<script type="text/javascript">
-      google.load('visualization', '1.1', {packages:['corechart','bar']});
-      google.setOnLoadCallback(drawChart);
+
+
+
+
+    <script type="text/javascript"
+        src="https://code.jquery.com/jquery-2.1.3.min.js"></script>
+    <script
+        src="http://cdnjs.cloudflare.com/ajax/libs/json2/20110223/json2.js"></script>
+    <script type="text/javascript"
+        src="node_modules/underscore/underscore-min.js"></script>
+    <script type="text/javascript"
+        src="node_modules/backbone/backbone-min.js"></script>
+    <!-- 	<script type="text/javascript" src="js/ante/lib/backbone-min.js"></script> -->
+    <script type="text/javascript"
+        src="node_modules/backbone.marionette/lib/backbone.marionette.min.js"></script>
+         <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+    <script type="text/javascript" src="js/wykresy/index.js"></script>
+    <!-- Latest compiled and minified JavaScript -->
+    <script
+        src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+
+
+
+
+
+
+    <script type="text/javascript">
+//       google.load('visualization', '1.1', {packages:['corechart','bar']});
+//       google.setOnLoadCallback(drawChart);
 
       function drawChart() {
     	  var chart = new google.charts.Bar(document.getElementById('chart_div'));
@@ -191,6 +172,7 @@ $analiza = new AnalizaDanych ();
         }).responseText;
 
         var data = new google.visualization.DataTable(jsonData);
+        chart.draw(data, options_suma_srednia);
         function selectHandler() {
             var selectedItem = chart.getSelection()[0];
             if (selectedItem) {
@@ -200,7 +182,6 @@ $analiza = new AnalizaDanych ();
               console.log('The user selected ' + topping + ' with value:' + value);
             }
           }
-        chart.draw(data, options_suma_srednia);
           google.visualization.events.addListener(chart, 'select', selectHandler);
       }
     </script>

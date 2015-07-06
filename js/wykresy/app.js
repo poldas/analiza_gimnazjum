@@ -1,25 +1,29 @@
-var APP = new Backbone.Marionette.Application();
-var RootView = Marionette.LayoutView.extend({
-	el : 'body',
-	regions : {
-		nav : '#navbar',
-		content : '#content',
-		lista : '#lista',
-		formModule : '#formModule',
-	}
-});
-APP.rootView = new RootView();
+// app.js
+var Backbone = require('backbone');
+var jquery = require('jquery');
+Backbone.$ = jquery;
+var Marionette = require('backbone.marionette');
+var _ = require('underscore'); // or lodash
 
+var App = Marionette.Application.extend({
+    initialize : function(options) {
+        this._subApps = {};
+        this.layoutView = null;
+    },
+    addSubApp : function(name, options) {
+        // pomija 'subAppClass' z dostepnych opcji
+        var subAppOptions = _.omit(options, 'subAppClass');
 
-APP.on('before:start', function(options) {
-	options.anotherThing = true; // Add more data to your options
-	console.log('App Initialization Before');
-});
-APP.addInitializer(function() {
-	console.log('App Add Initialization');
-});
-APP.on('start', function(options) {
-	console.log('App Initialization Start');
+        // tworzy nowa instancje modulu i dodaje do listy moduluw
+        var subApp = new options.subAppClass(subAppOptions);
+        this._subApps[name] = subApp;
+    },
+    addLayoutView : function(layoutView) {
+        this.layoutView = layoutView;
+    },
+    getSupApp : function(name) {
+        return this._subApps[name] !== undefined ? this._subApps[name] : {};
+    }
 });
 
-APP.start({});
+module.exports = App;

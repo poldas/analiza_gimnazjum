@@ -1,57 +1,16 @@
-<?php
-
-?>
-
 <!DOCTYPE html>
 <html>
 <head>
 <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
 <title>Google Visualization API Sample</title>
-<!--
-  One script tag loads all the required libraries! Do not specify any chart types in the
-  autoload statement.
--->
-<script type="text/javascript"
-      src='https://www.google.com/jsapi?autoload={
-        "modules":[{
-        "name":"visualization",
-        "version":"1"
-        }]
-      }'></script>
-<script type="text/javascript">
-  google.setOnLoadCallback(drawVisualization);
-
-  function drawVisualization() {
-    var wrap = new google.visualization.ChartWrapper({
-       'chartType':'LineChart',
-       'dataSourceUrl':'http://spreadsheets.google.com/tq?key=pCQbetd-CptGXxxQIG7VFIQ&pub=1',
-       'containerId':'visualization',
-       'query':'SELECT A,D WHERE D > 100 ORDER BY D',
-       'options': {'title':'Population Density (people/km^2)', 'legend':'none'}
-       });
-     wrap.draw();
-  }
-
-  // zapytanie do stylesheet
-  function initialize() {
-	  var opts = {sendMethod: 'auto'};
-	  // Replace the data source URL on next line with your data source URL.
-	  var query = new google.visualization.Query('http://spreadsheets.google.com?key=123AB&...', opts);
-
-	  // Optional request to return only column C and the sum of column B, grouped by C members.
-	  query.setQuery('select C, sum(B) group by C');
-
-	  // Send the query with a callback function.
-	  query.send(handleQueryResponse);
-	}
-
-	function handleQueryResponse(response) {
-	  // Called when the query response is returned.
-	}
-
-</script>
 </head>
 <body>
-  <div id="visualization" style="height: 400px; width: 400px;"></div>
+  <div id="app-view">
+    <div id="nav-view">
+  </div>
+  <div id="content-view">
+  </div>
+  </div>
+  <script type="text/javascript"></script>
 </body>
 </html>
