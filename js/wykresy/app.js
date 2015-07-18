@@ -1,29 +1,42 @@
-// app.js
-var Backbone = require('backbone');
-var jquery = require('jquery');
-Backbone.$ = jquery;
-var Marionette = require('backbone.marionette');
-var _ = require('underscore'); // or lodash
+var Marionette = Backbone.Marionette;
 
 var App = Marionette.Application.extend({
-    initialize : function(options) {
-        this._subApps = {};
-        this.layoutView = null;
-    },
-    addSubApp : function(name, options) {
-        // pomija 'subAppClass' z dostepnych opcji
-        var subAppOptions = _.omit(options, 'subAppClass');
+    onStart : function(options) {
+        console.log("App onStart function", options);
+        // główny element w którym będzie renderowana aplikacja
+        // jako opcję przy starcie przekazujemy selektor
+        this.mainView = new Marionette.Region({
+            el : options.mainRegion
+        });
 
-        // tworzy nowa instancje modulu i dodaje do listy moduluw
-        var subApp = new options.subAppClass(subAppOptions);
-        this._subApps[name] = subApp;
+        this.mainLayout = new options.mainLayout(options);
+        this.mainView.show(this.getMainLayout());
+
     },
-    addLayoutView : function(layoutView) {
-        this.layoutView = layoutView;
+    onBeforeStart : function(options) {
+        console.log("App onBeforeStart function");
+        var self = this;
+        this.reqres.setHandler("get:header:items", function() {
+            console.log("get:header:items");
+            return self.entityController.getItems();
+
+        });
+        this.commands.setHandler("load:google", function(callback) {
+            console.log("load:google");
+            var load = google.load('visualization', '1.1', {
+                packages : [ 'corechart', 'bar' ],
+                callback : callback
+            });
+        });
     },
-    getSupApp : function(name) {
-        return this._subApps[name] !== undefined ? this._subApps[name] : {};
+    getMainLayout : function() {
+        return this.mainLayout;
+    },
+    initialize : function(options) {
+        console.log('App initialize', options);
+        this.entityController = new ChartEntityController();
+        if (Backbone.history) {
+            Backbone.history.start();
+        }
     }
 });
-
-module.exports = App;
