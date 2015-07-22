@@ -12,7 +12,7 @@ var navItems = [ {
     id : "import"
 }, {
     name : "Php-wykrese",
-    event : "php:clicked",
+    event : "change:chart",
     id : "php wykresy"
 } ];
 
@@ -21,3 +21,6 @@ var ChartEntityController = Marionette.Object.extend({
         return navItems;
     }
 });
+var APP = (function(app){
+
+}(APP));

@@ -6,6 +6,7 @@ var NavItemView = Marionette.ItemView.extend({
     template : _
             .template('<a href="#<%= name %>" id="<%= id %>"><%= name %></a>')
 });
+
 var NavComposite = Marionette.CompositeView.extend({
     template : "#nav-template",
     childView : NavItemView,

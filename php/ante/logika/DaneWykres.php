@@ -110,22 +110,12 @@ class AnalizaDanych {
     }
     public function pobierz_dane_suma_srednia_json() {
         $dane_db = $this->pobierz_dane_db ( self::SQL_SUMA_SREDNIA );
-        return $this->formatuj_do_datatable ( $dane_db, 'suma-srednia');
+        return $this->formatuj_do_datatable ( $dane_db);
     }
-
-    public function pobierz_dane_latwosc_klasa_zadanie_json() {
-        $dane_db = $this->pobierz_dane_db ( self::SQL_LATWOSC_KLASA_ZADANIE );
-        return $this->formatuj_do_datatable ( $dane_db, 'latwosc-klasa-zadanie');
-    }
-
     private function formatuj_do_datatable($dane_db, $formater = 'suma-srednia') {
         $czy_wysylac = false;
         if ($formater == 'suma-srednia') {
             $table = $this->formater_suma_srednia($dane_db);
-            $czy_wysylac = true;
-        }
-        if ($formater == 'latwosc-klasa-zadanie') {
-            $table = $this->formater_latwosc_klasa_zadanie($dane_db);
             $czy_wysylac = true;
         }
         if ($czy_wysylac) {
@@ -135,43 +125,6 @@ class AnalizaDanych {
             return $jsonTable;
         }
     }
-
-    private function formater_latwosc_klasa_zadanie($dane_db) {
-        $rows = array ();
-        $table = array ();
-        $table ['cols'] = array (
-                array (
-                        'label' => 'Klasa',
-                        'type' => 'string'
-                ),
-                array (
-                        'label' => 'Nr zadania',
-                        'type' => 'number'
-                ),
-                array (
-                        'label' => 'Łatwość',
-                        'type' => 'number'
-                )
-        );
-        foreach ( $dane_db as $r ) {
-            $temp = array ();
-            $temp [] = array (
-                    'v' => ( string ) $r ['klasa']
-            );
-            $temp [] = array (
-                    'v' => ( float ) $r ["nr_zadania"]
-            );
-            $temp [] = array (
-                    'v' => ( int ) $r ["latwosc"]
-            );
-            $rows [] = array ('c' => $temp);
-        }
-
-        $table ['rows'] = $rows;
-
-        return $table;
-    }
-
     private function formater_suma_srednia($dane_db) {
         $rows = array ();
         $table = array ();
