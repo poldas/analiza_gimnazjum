@@ -28,7 +28,7 @@ var App = Marionette.Application.extend({
                 callback : callback
             });
         });
-this.commands.execute("load:google");
+        this.commands.execute("load:google");
     },
     getMainLayout : function() {
         return this.mainLayout;

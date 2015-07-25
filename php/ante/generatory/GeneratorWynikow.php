@@ -1,16 +1,24 @@
 <?php
-class GeneratorWynikow {
+include 'generatory/Generator.php';
+class GeneratorWynikow implements IGenerator {
 
 	private $nazwa_wyniki_egzaminu = 'wyniki_egzaminu';
+	private $nazwa_umiejetnosc_kategoria = 'obszary';
 	protected $dane = array();
 	protected $zrodlo_danych = null;
 	protected $zapytanie_sql = '';
+	protected $zapytanie_sql_obszar = '';
     protected $nazwy_zadan = 0;
     protected $max_punkntow = array();
+    protected $umiejetnosc = array();
+    protected $obszar = array();
 
 	public function generuj_zapytanie_sql() {
 		$this->ustaw_dane_ze_zrodla_danych();
 		$this->generuj_tabela_wyniki_egzaminu();
+		$this->generuj_tabela_umiejetnosci_zadania();
+// 		var_dump($this->zapytanie_sql);
+// 		var_dump($this->zapytanie_sql_obszar);
 	}
 	private function ustaw_dane_ze_zrodla_danych() {
 	    $dane_do_sparsowania = file($this->zrodlo_danych);
@@ -25,9 +33,18 @@ class GeneratorWynikow {
 
 	private function parsuj_dane($dane_do_sparsowania) {
 	    // usuwamy nagłówek który jest numerami zadan
+	    $this->umiejetnosc = array_shift($dane_do_sparsowania);
+	    $this->umiejetnosc = $this->usun_pierwszy_element($this->umiejetnosc);
+	    $this->umiejetnosc = explode(',', $this->umiejetnosc);
+
+	    $this->obszar = array_shift($dane_do_sparsowania);
+	    $this->obszar = $this->usun_pierwszy_element($this->obszar);
+	    $this->obszar = explode(',', $this->obszar);
+
 	    $this->max_punkntow = array_shift($dane_do_sparsowania);
 	    $this->max_punkntow = $this->usun_pierwszy_element($this->max_punkntow);
 	    $this->max_punkntow = explode(',', $this->max_punkntow);
+
 	    $this->nazwy_zadan = array_shift($dane_do_sparsowania);
 	    $this->nazwy_zadan = $this->usun_pierwszy_element($this->nazwy_zadan);
 	    $this->nazwy_zadan = explode(',', $this->nazwy_zadan);
@@ -48,6 +65,10 @@ class GeneratorWynikow {
 
 	public function pobierz_zapytanie_sql() {
 		return $this->zapytanie_sql;
+	}
+
+	public function pobierz_zapytanie_sql_obszar() {
+	    return $this->zapytanie_sql_obszar;
 	}
 
 	private function usun_pierwszy_element($wiersz){
@@ -79,7 +100,7 @@ class GeneratorWynikow {
 					return;
 				}
 				// przygotowanie pojedynczego wpisu kolejność jest istotna
-				$klasa = substr($kod_ucznia, 0, 1); // $wynikzostawia pierwszy znak, nazwe klasy np. 'A'
+				$klasa = substr($kod_ucznia, 0, 1); // $wynik zostawia pierwszy znak, nazwe klasy np. 'A'
 				array_push($dane_do_inserta, "'".$klasa."'");
 				array_push($dane_do_inserta, "'".$kod_ucznia."'");
 				array_push($dane_do_inserta, $nr_zadania);
@@ -97,6 +118,32 @@ class GeneratorWynikow {
 
 		$this->zapytanie_sql = $sql;
 		return $sql;
+	}
+
+	protected function generuj_tabela_umiejetnosci_zadania() {
+	    $liczba_elementow = count($this->umiejetnosc);
+	    $dane_do_inserta = array();
+	    for ($i = 0; $i < $liczba_elementow; $i++) {
+	        $umiejetnosc = $this->umiejetnosc[$i];
+	        $obszar = $this->obszar[$i];
+	        $zadanie = $this->nazwy_zadan[$i];
+            $this->generuj_umiejetnosc_obszar($umiejetnosc, $obszar, $zadanie, $dane_do_inserta);
+	    }
+
+	    $dane  = join(',', $dane_do_inserta);
+	    $sql = $dane ? "INSERT INTO ".$this->nazwa_umiejetnosc_kategoria." VALUES ".$dane.";" : '';
+	    $this->zapytanie_sql_obszar = $sql;
+	}
+
+	protected function generuj_umiejetnosc_obszar($umiejetnosc_cala, $obszar, $zadanie, &$dane_do_inserta) {
+        $umiejetnosci = explode('/', $umiejetnosc_cala);
+        foreach ($umiejetnosci as $umiejetnosc) {
+            $tmp = array();
+            array_push($tmp, "'".$obszar."'");
+            array_push($tmp, "'".$umiejetnosc."'");
+            array_push($tmp, "'".$zadanie."'");
+            array_push($dane_do_inserta, '('.join(',', $tmp).')');
+        }
 	}
 }
 ?>

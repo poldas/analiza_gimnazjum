@@ -21,6 +21,10 @@ var ChartEntityController = Marionette.Object.extend({
         return navItems;
     }
 });
-var APP = (function(app){
+var API = (function(api){
+	api.getNavCollection = function(data){
+		return new NavCollection({collection:data});
+	}
 
-}(APP));
+	return api;
+}(API || {}));

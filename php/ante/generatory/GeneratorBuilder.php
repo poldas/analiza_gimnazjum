@@ -1,9 +1,22 @@
 <?php
 class GeneratorBuilder {
 
-	private $generator_automatyczny = null;
+    /**
+     * Logika generatora
+     *
+     * @var GeneratorWynikow
+     */
+	private $generator = null;
 	private $dbhandler = null;
 
+	/**
+	 * ustawia generator,
+	 * ustawia uchwyt bazy danych
+	 * ustawia źródło danych
+	 *
+	 * @param unknown $zrodlo_danych
+	 * @return GeneratorBuilder
+	 */
 	public function __construct($zrodlo_danych) {
 		$this->ustaw_generatory();
 		$this->ustaw_dbhandler();
@@ -12,11 +25,14 @@ class GeneratorBuilder {
 	}
 
 	public function generuj_zapytanie_sql() {
-		$this->generator_automatyczny->generuj_zapytanie_sql();
+		$this->generator->generuj_zapytanie_sql();
 	}
 
+	public function generuj_zapytanie_sql_obszar() {
+	    $this->generator->generuj_zapytanie_sql_();
+	}
 	protected function ustaw_generatory() {
-		$this->generator_automatyczny = new GeneratorWynikow();
+		$this->generator = new GeneratorWynikow();
 		return $this;
 	}
 
@@ -26,7 +42,7 @@ class GeneratorBuilder {
 	}
 
 	protected function ustaw_zrodlo_danych($zrodlo_danych) {
-		$this->generator_automatyczny->ustaw_zrodlo_danych($zrodlo_danych);
+		$this->generator->ustaw_zrodlo_danych($zrodlo_danych);
 		return $this;
 	}
 
@@ -37,16 +53,24 @@ class GeneratorBuilder {
 			print_r($e->getMessage());
 		}
 	}
+
+	public function dodaj_dane_automatycznie() {
+        $this->dodaj_wpis($this->pobierz_sql());
+        $this->dodaj_wpis($this->pobierz_sql_obszar());
+	}
 	public function pobierz_sql() {
-		return $this->generator_automatyczny->pobierz_zapytanie_sql();
+		return $this->generator->pobierz_zapytanie_sql();
+	}
+	public function pobierz_sql_obszar() {
+	    return $this->generator->pobierz_zapytanie_sql_obszar();
 	}
 	public function pobierz_dane() {
-	    return $this->generator_automatyczny->pobierz_dane();
+	    return $this->generator->pobierz_dane();
 	}
 	public function drukuj_sql() {
 		print_r($this->pobierz_sql());
 	}
 	public function drukuj_dane() {
-		print_r($this->generator_automatyczny->pobierz_dane());
+		print_r($this->generator->pobierz_dane());
 	}
 }

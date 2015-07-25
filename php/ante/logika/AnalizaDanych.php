@@ -3,7 +3,7 @@ class AnalizaDanych {
 
     const SQL_SREDNIA_PLEC = "
         select
-            avg(we.liczba_punktow) as we.srednia_punktow,
+            avg(we.iczba_punktow) as we.srednia_punktow,
             u.plec
         from wyniki_egzaminu as we
         left join uczniowie as u
@@ -104,10 +104,22 @@ class AnalizaDanych {
         group by we.nr_zadania, u.plec
     ";
 
+    const SQL_UNION_DYSLEKSJA = "select avg(we.liczba_punktow) as srednia_punktow, u.dysleksja, 0 miasto, 0 plec, 'szkola' klasa from wyniki_egzaminu as we left join uczniowie as u on u.kod_ucznia = we.kod_ucznia GROUP BY u.dysleksja";
+    const SQL_UNION_MIEJSCOWOSC = "select avg(we.liczba_punktow) as srednia_punktow, 0 dysleksja, u.miejscowosc, 0 plec, 'szkola' klasa from wyniki_egzaminu as we left join uczniowie as u on u.kod_ucznia = we.kod_ucznia GROUP BY u.miejscowosc";
+    const SQL_UNION_PLEC = "select avg(we.liczba_punktow) as srednia_punktow, 0 dysleksja, 0 miasto, u.plec, 'szkola' klasa from wyniki_egzaminu as we left join uczniowie as u on u.kod_ucznia = we.kod_ucznia GROUP BY u.plec";
+
+    const UNION_SZKOLA = "select avg(we.liczba_punktow) as srednia_punktow, u.dysleksja, 0 miejscowosc, 0 plec, 'szkola' klasa from wyniki_egzaminu as we left join uczniowie as u on u.kod_ucznia = we.kod_ucznia GROUP BY u.dysleksja UNION select avg(we.liczba_punktow) as srednia_punktow, 0 dysleksja, u.miejscowosc, 0 plec, 'szkola' klasa from wyniki_egzaminu as we left join uczniowie as u on u.kod_ucznia = we.kod_ucznia GROUP BY u.miejscowosc UNION select avg(we.liczba_punktow) as srednia_punktow, 0 dysleksja, 0 miejscowosc, u.plec, 'szkola' klasa from wyniki_egzaminu as we left join uczniowie as u on u.kod_ucznia = we.kod_ucznia GROUP BY u.plec";
+    const UNION_KLASA = "select avg(we.liczba_punktow) as srednia_punktow, u.dysleksja, 0 miejscowosc, 0 plec, we.klasa from wyniki_egzaminu as we left join uczniowie as u on u.kod_ucznia = we.kod_ucznia GROUP BY u.dysleksja, we.klasa UNION select avg(we.liczba_punktow) as srednia_punktow, 0 dysleksja, u.miejscowosc, 0 plec, we.klasa from wyniki_egzaminu as we left join uczniowie as u on u.kod_ucznia = we.kod_ucznia GROUP BY u.miejscowosc,we.klasa UNION select avg(we.liczba_punktow) as srednia_punktow, 0 dysleksja, 0 miejscowosc, u.plec, we.klasa from wyniki_egzaminu as we left join uczniowie as u on u.kod_ucznia = we.kod_ucznia GROUP BY u.plec, we.klasa";
+    const UNION_ALL_SREDNIA = "select avg(we.liczba_punktow) as srednia_punktow, u.dysleksja, 0 miejscowosc, 0 plec, 'szkola' klasa from wyniki_egzaminu as we left join uczniowie as u on u.kod_ucznia = we.kod_ucznia GROUP BY u.dysleksja UNION select avg(we.liczba_punktow) as srednia_punktow, 0 dysleksja, u.miejscowosc, 0 plec, 'szkola' klasa from wyniki_egzaminu as we left join uczniowie as u on u.kod_ucznia = we.kod_ucznia GROUP BY u.miejscowosc UNION select avg(we.liczba_punktow) as srednia_punktow, 0 dysleksja, 0 miejscowosc, u.plec, 'szkola' klasa from wyniki_egzaminu as we left join uczniowie as u on u.kod_ucznia = we.kod_ucznia GROUP BY u.plec UNION select avg(we.liczba_punktow) as srednia_punktow, u.dysleksja, 0 miejscowosc, 0 plec, we.klasa from wyniki_egzaminu as we left join uczniowie as u on u.kod_ucznia = we.kod_ucznia GROUP BY u.dysleksja, we.klasa UNION select avg(we.liczba_punktow) as srednia_punktow, 0 dysleksja, u.miejscowosc, 0 plec, we.klasa from wyniki_egzaminu as we left join uczniowie as u on u.kod_ucznia = we.kod_ucznia GROUP BY u.miejscowosc,we.klasa UNION select avg(we.liczba_punktow) as srednia_punktow, 0 dysleksja, 0 miejscowosc, u.plec, we.klasa from wyniki_egzaminu as we left join uczniowie as u on u.kod_ucznia = we.kod_ucznia GROUP BY u.plec, we.klasa";
+
     private $dbhandler = null;
+
     public function __construct() {
         $this->ustaw_db ();
     }
+
+
+
     public function pobierz_dane_suma_srednia_json() {
         $dane_db = $this->pobierz_dane_db ( self::SQL_SUMA_SREDNIA );
         return $this->formatuj_do_datatable ( $dane_db, 'suma-srednia');
@@ -117,6 +129,23 @@ class AnalizaDanych {
         $dane_db = $this->pobierz_dane_db ( self::SQL_LATWOSC_KLASA_ZADANIE );
         return $this->formatuj_do_datatable ( $dane_db, 'latwosc-klasa-zadanie');
     }
+
+
+    public function pobierz_srednia() {
+        // średnia pkt szkola
+        // średnia pkt w klasach
+        // średnia pkt szkola plec
+        // średnia pkt szkola miasto
+        // średnia pkt szkola dysleksja
+        // średnia pkt klasach plec
+        // średnia pkt klasach miasto
+        // średnia pkt klasach dysleksja
+        // UNION_ALL_SREDNIA
+    }
+
+
+
+
 
     private function formatuj_do_datatable($dane_db, $formater = 'suma-srednia') {
         $czy_wysylac = false;

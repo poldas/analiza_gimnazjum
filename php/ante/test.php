@@ -1,7 +1,4 @@
 START test.php
-<div id="chart_div"></div>
-<div id="chart_div_suma_srednia"></div>
-<div id="chart_div_zdania"></div>
 <pre>
 <?php
 ini_set('display_errors','1');
@@ -13,8 +10,9 @@ function autoloader($nazwa_klasy) {
     }
 }
 spl_autoload_register('autoloader');
-$generator = new GeneratorBuilder('../../dane/wyniki_egzaminu.csv');
-// $generator->generuj_zapytanie_sql();
+$generator = new GeneratorBuilder('../../dane/wyniki.csv');
+$generator->generuj_zapytanie_sql();
+// $generator->dodaj_dane_automatycznie();
 // $generator->dodaj_wpis($generator->pobierz_sql());
 // $generator->drukuj_sql();
 
