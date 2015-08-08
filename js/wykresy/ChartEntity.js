@@ -17,6 +17,11 @@ var navItems = [ {
     event : "change:chart",
     id : "php wykresy",
     url : "/analiza/php/ante/wykresy.php"
+}, {
+    name : "Dodaj dane",
+    event : "change:chart",
+    id : "dodaj-dane",
+    url : "/analiza/php/ante/test.php"
 } ];
 
 var ChartEntityController = Marionette.Object.extend({

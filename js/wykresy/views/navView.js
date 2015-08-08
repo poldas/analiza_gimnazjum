@@ -5,7 +5,7 @@ var NavItemView = Marionette.ItemView
                 "click a" : 'item:clicked'
             },
             template : _
-                    .template('<a href="<%= url %>#<%= name %>" id="<%= id %>"><%= name %></a>')
+                    .template('<a href="<%= url %>#<%= id %>" id="<%= id %>"><%= name %></a>')
         });
 
 var NavComposite = Marionette.CompositeView.extend({

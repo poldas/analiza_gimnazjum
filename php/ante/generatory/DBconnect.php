@@ -1,4 +1,7 @@
 <?php
+function debug($dane) {
+    var_dump($dane);
+}
 class DBconnect {
 	// połączenie z bazą danych
 	const servername = "localhost";

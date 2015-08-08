@@ -1,9 +1,5 @@
 <?php
 include 'AnalizaDanychSql.php';
-function debug($dane) {
-    var_dump($dane);
-}
-
 abstract class AnalizaDanychCore implements AnalizaDanychSql {
 
     protected $dbhandler = null;
@@ -72,12 +68,14 @@ abstract class AnalizaDanychCore implements AnalizaDanychSql {
         }
     }
 
-    protected function formatuj_do_datatable($dane_db, $konfiguracja) {
+    protected function formatuj_do_datatable($rodzaj_danych, $konfiguracja) {
         $rows = array ();
         $table = array ();
-        $table ['cols'] = $konfiguracja;
-
+        $dane_db = $this->dane[$rodzaj_danych];
         $klucze = array_keys($dane_db);
+
+
+        $table ['cols'] = $konfiguracja;
         foreach($dane_db[$klucze[0]] as $klasa => $wiesz_danych) {
             $temp = array ();
             $temp [] = array (
@@ -86,6 +84,7 @@ abstract class AnalizaDanychCore implements AnalizaDanychSql {
             $temp [] = array (
                 'v' => ( float ) $dane_db[$klucze[0]][$klasa]["srednia_punktow"]
             );
+            // jeżeli jest drugi klucz (np. porównanie chłopcy dziewczynki)
             if (isset($klucze[1])) {
                 $temp [] = array (
                     'v' => ( float ) $dane_db[$klucze[1]][$klasa]["srednia_punktow"]
@@ -130,7 +129,7 @@ class AnalizaDanych extends AnalizaDanychCore {
                 'type' => 'number'
             )
         );
-        return $this->formatuj_do_datatable($this->dane[self::POROWNANIE_CALOSC], $konfiguracja);
+        return $this->formatuj_do_datatable(self::POROWNANIE_CALOSC, $konfiguracja);
     }
 
     public function pobierz_dane_porownanie_srednia_plec() {
@@ -148,7 +147,7 @@ class AnalizaDanych extends AnalizaDanychCore {
                 'type' => 'number'
             )
         );
-        return $this->formatuj_do_datatable($this->dane[self::POROWNANIE_PLEC], $konfiguracja);
+        return $this->formatuj_do_datatable(self::POROWNANIE_PLEC, $konfiguracja);
     }
 
     public function pobierz_dane_porownanie_srednia_lokalizacja() {
@@ -166,7 +165,7 @@ class AnalizaDanych extends AnalizaDanychCore {
                 'type' => 'number'
             )
         );
-        return $this->formatuj_do_datatable($this->dane[self::POROWNANIE_LOKALIZACJA], $konfiguracja);
+        return $this->formatuj_do_datatable(self::POROWNANIE_LOKALIZACJA, $konfiguracja);
     }
 
     public function pobierz_dane_porownanie_srednia_dysleksja() {
@@ -184,7 +183,7 @@ class AnalizaDanych extends AnalizaDanychCore {
                 'type' => 'number'
             )
         );
-        return $this->formatuj_do_datatable($this->dane[self::POROWNANIE_DYSLEKSJA], $konfiguracja);
+        return $this->formatuj_do_datatable(self::POROWNANIE_DYSLEKSJA, $konfiguracja);
     }
 }
 ?>

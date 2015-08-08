@@ -10,11 +10,14 @@ function autoloader($nazwa_klasy) {
     }
 }
 spl_autoload_register('autoloader');
-$generator = new GeneratorBuilder('../../dane/wyniki.csv');
+$generator = new GeneratorBuilder();
+$generator->ustaw_zrodlo_danych('../../dane/wyniki.csv');
 $generator->generuj_zapytanie_sql();
+$generator->ustaw_zrodlo_danych_uczniowie('../../dane/uczniowie.csv');
+$generator->generuj_zapytanie_sql_uczniowie();
 // $generator->dodaj_dane_automatycznie();
 // $generator->dodaj_wpis($generator->pobierz_sql());
-// $generator->drukuj_sql();
+// $generator->dodaj_wpis($generator->pobierz_sql_uczniowie());
 
 ?>
 </pre>
