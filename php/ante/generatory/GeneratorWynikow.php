@@ -135,6 +135,14 @@ class GeneratorWynikow implements IGenerator {
 	    $this->zapytanie_sql_obszar = $sql;
 	}
 
+	/**
+	 * Generuje zapytanie do tablei obszar
+	 *
+	 * @param unknown $umiejetnosc_cala
+	 * @param unknown $obszar
+	 * @param unknown $zadanie
+	 * @param unknown $dane_do_inserta
+	 */
 	protected function generuj_umiejetnosc_obszar($umiejetnosc_cala, $obszar, $zadanie, &$dane_do_inserta) {
         $umiejetnosci = explode('/', $umiejetnosc_cala);
         foreach ($umiejetnosci as $umiejetnosc) {

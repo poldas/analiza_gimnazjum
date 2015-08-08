@@ -16,7 +16,6 @@ $generator->generuj_zapytanie_sql();
 // $generator->dodaj_wpis($generator->pobierz_sql());
 // $generator->drukuj_sql();
 
-$analiza = new AnalizaDanych();
 ?>
 </pre>
 KONIEC test.php
