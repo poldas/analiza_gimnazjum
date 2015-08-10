@@ -5,6 +5,9 @@ interface AnalizaDanychSql {
     const POROWNANIE_PLEC = "plec";
     const POROWNANIE_LOKALIZACJA = "lokalizacja";
     const POROWNANIE_DYSLEKSJA = "dysleksja";
+    const POROWNANIE_ZADANIA = 'zadania';
+    const POROWNANIE_SREDNIA = 'srednia';
+    const POROWNANIE_OBSZAR = 'obszar';
 
     const SQL_LATWOSC_KLASA_ZADANIE = "
         select
@@ -142,6 +145,7 @@ interface AnalizaDanychSql {
             from wyniki_egzaminu as we
             left join uczniowie as u
                 on u.kod_ucznia = we.kod_ucznia
+             GROUP by we.nr_zadania
             UNION
             select sum(we.liczba_punktow)/sum(we.max_punktow) as srednia_punktow,
                 we.nr_zadania,
@@ -219,5 +223,231 @@ interface AnalizaDanychSql {
             left join uczniowie as u
                 on u.kod_ucznia = we.kod_ucznia
             GROUP BY we.nr_zadania, u.plec, we.klasa";
+
+    const UNION_ALL_SREDNIA_OBSZAR_UMIEJETNOSC = "
+            select sum(we.liczba_punktow)/sum(we.max_punktow) as srednia_punktow,
+                o.obszar,
+                null umiejetnosc,
+                null dysleksja,
+                null lokalizacja,
+                null plec,
+                'szkola' klasa
+            from wyniki_egzaminu as we
+            left join uczniowie as u
+                on u.kod_ucznia = we.kod_ucznia
+            left join obszary as o
+                on o.nr_zadania = we.nr_zadania
+             GROUP by o.obszar
+            UNION
+            select sum(we.liczba_punktow)/sum(we.max_punktow) as srednia_punktow,
+                o.obszar,
+                null umiejetnosc,
+                null dysleksja,
+                null lokalizacja,
+                null plec,
+                we.klasa
+            from wyniki_egzaminu as we
+            left join uczniowie as u
+                on u.kod_ucznia = we.kod_ucznia
+            left join obszary as o
+                on o.nr_zadania = we.nr_zadania
+             GROUP by o.obszar, we.klasa
+            UNION
+            select sum(we.liczba_punktow)/sum(we.max_punktow) as srednia_punktow,
+                o.obszar,
+                null umiejetnosc,
+                u.dysleksja,
+                null lokalizacja,
+                null plec,
+                'szkola' klasa
+            from wyniki_egzaminu as we
+            left join uczniowie as u
+                on u.kod_ucznia = we.kod_ucznia
+            left join obszary as o
+                on o.nr_zadania = we.nr_zadania
+             GROUP by o.obszar, u.dysleksja
+            UNION
+            select sum(we.liczba_punktow)/sum(we.max_punktow) as srednia_punktow,
+                o.obszar,
+                null umiejetnosc,
+                null dysleksja,
+                u.lokalizacja,
+                null plec,
+                'szkola' klasa
+            from wyniki_egzaminu as we
+            left join uczniowie as u
+                on u.kod_ucznia = we.kod_ucznia
+            left join obszary as o
+                on o.nr_zadania = we.nr_zadania
+             GROUP by o.obszar, u.lokalizacja
+            UNION
+            select sum(we.liczba_punktow)/sum(we.max_punktow) as srednia_punktow,
+                o.obszar,
+                null umiejetnosc,
+                null dysleksja,
+                null lokalizacja,
+                u.plec,
+                'szkola' klasa
+            from wyniki_egzaminu as we
+            left join uczniowie as u
+                on u.kod_ucznia = we.kod_ucznia
+            left join obszary as o
+                on o.nr_zadania = we.nr_zadania
+             GROUP by o.obszar, u.plec
+            UNION
+            select sum(we.liczba_punktow)/sum(we.max_punktow) as srednia_punktow,
+                o.obszar,
+                null umiejetnosc,
+                u.dysleksja,
+                null lokalizacja,
+                null plec,
+                we.klasa
+            from wyniki_egzaminu as we
+            left join uczniowie as u
+                on u.kod_ucznia = we.kod_ucznia
+            left join obszary as o
+                on o.nr_zadania = we.nr_zadania
+             GROUP by o.obszar, we.klasa, u.dysleksja
+            UNION
+            select sum(we.liczba_punktow)/sum(we.max_punktow) as srednia_punktow,
+                o.obszar,
+                null umiejetnosc,
+                null dysleksja,
+                u.lokalizacja,
+                null plec,
+                we.klasa
+            from wyniki_egzaminu as we
+            left join uczniowie as u
+                on u.kod_ucznia = we.kod_ucznia
+            left join obszary as o
+                on o.nr_zadania = we.nr_zadania
+             GROUP by o.obszar, we.klasa, u.lokalizacja
+            UNION
+            select sum(we.liczba_punktow)/sum(we.max_punktow) as srednia_punktow,
+                o.obszar,
+                null umiejetnosc,
+                null dysleksja,
+                null lokalizacja,
+                u.plec,
+                we.klasa
+            from wyniki_egzaminu as we
+            left join uczniowie as u
+                on u.kod_ucznia = we.kod_ucznia
+            left join obszary as o
+                on o.nr_zadania = we.nr_zadania
+             GROUP by o.obszar, we.klasa, u.plec
+            UNION
+            select sum(we.liczba_punktow)/sum(we.max_punktow) as srednia_punktow,
+                o.obszar,
+                o.umiejetnosc,
+                null dysleksja,
+                null lokalizacja,
+                null plec,
+                'szkola' klasa
+            from wyniki_egzaminu as we
+            left join uczniowie as u
+                on u.kod_ucznia = we.kod_ucznia
+            left join obszary as o
+                on o.nr_zadania = we.nr_zadania
+             GROUP by o.obszar, o.umiejetnosc
+            UNION
+            select sum(we.liczba_punktow)/sum(we.max_punktow) as srednia_punktow,
+                o.obszar,
+                o.umiejetnosc,
+                null dysleksja,
+                null lokalizacja,
+                null plec,
+                we.klasa
+            from wyniki_egzaminu as we
+            left join uczniowie as u
+                on u.kod_ucznia = we.kod_ucznia
+            left join obszary as o
+                on o.nr_zadania = we.nr_zadania
+             GROUP by o.obszar, o.umiejetnosc, we.klasa
+            UNION
+            select sum(we.liczba_punktow)/sum(we.max_punktow) as srednia_punktow,
+                o.obszar,
+                o.umiejetnosc,
+                u.dysleksja,
+                null lokalizacja,
+                null plec,
+                'szkola' klasa
+            from wyniki_egzaminu as we
+            left join uczniowie as u
+                on u.kod_ucznia = we.kod_ucznia
+            left join obszary as o
+                on o.nr_zadania = we.nr_zadania
+             GROUP by o.obszar, o.umiejetnosc, u.dysleksja
+            UNION
+            select sum(we.liczba_punktow)/sum(we.max_punktow) as srednia_punktow,
+                o.obszar,
+                o.umiejetnosc,
+                null dysleksja,
+                u.lokalizacja,
+                null plec,
+                'szkola' klasa
+            from wyniki_egzaminu as we
+            left join uczniowie as u
+                on u.kod_ucznia = we.kod_ucznia
+            left join obszary as o
+                on o.nr_zadania = we.nr_zadania
+             GROUP by o.obszar, o.umiejetnosc, u.lokalizacja
+            UNION
+            select sum(we.liczba_punktow)/sum(we.max_punktow) as srednia_punktow,
+                o.obszar,
+                o.umiejetnosc,
+                null dysleksja,
+                null lokalizacja,
+                u.plec,
+                'szkola' klasa
+            from wyniki_egzaminu as we
+            left join uczniowie as u
+                on u.kod_ucznia = we.kod_ucznia
+            left join obszary as o
+                on o.nr_zadania = we.nr_zadania
+             GROUP by o.obszar, o.umiejetnosc, u.plec
+            UNION
+            select sum(we.liczba_punktow)/sum(we.max_punktow) as srednia_punktow,
+                o.obszar,
+                o.umiejetnosc,
+                u.dysleksja,
+                null lokalizacja,
+                null plec,
+                we.klasa
+            from wyniki_egzaminu as we
+            left join uczniowie as u
+                on u.kod_ucznia = we.kod_ucznia
+            left join obszary as o
+                on o.nr_zadania = we.nr_zadania
+             GROUP by o.obszar, o.umiejetnosc, we.klasa, u.dysleksja
+            UNION
+            select sum(we.liczba_punktow)/sum(we.max_punktow) as srednia_punktow,
+                o.obszar,
+                o.umiejetnosc,
+                null dysleksja,
+                u.lokalizacja,
+                null plec,
+                we.klasa
+            from wyniki_egzaminu as we
+            left join uczniowie as u
+                on u.kod_ucznia = we.kod_ucznia
+            left join obszary as o
+                on o.nr_zadania = we.nr_zadania
+             GROUP by o.obszar, o.umiejetnosc, we.klasa, u.lokalizacja
+            UNION
+            select sum(we.liczba_punktow)/sum(we.max_punktow) as srednia_punktow,
+                o.obszar,
+                o.umiejetnosc,
+                null dysleksja,
+                null lokalizacja,
+                u.plec,
+                we.klasa
+            from wyniki_egzaminu as we
+            left join uczniowie as u
+                on u.kod_ucznia = we.kod_ucznia
+            left join obszary as o
+                on o.nr_zadania = we.nr_zadania
+             GROUP by o.obszar, o.umiejetnosc, we.klasa, u.plec
+            ";
 }
 ?>

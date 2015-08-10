@@ -118,7 +118,7 @@ class GeneratorWynikow implements IGenerator {
                 $dane_do_inserta = array();
 
                 // numer zadania liczony od 1, zadania są po kolei
-                $nr_zadania = $i+1;
+                $nr_zadania = trim($this->nazwy_zadan[$i]);
                 // prosta walidacja
                 $czy_puste_dane = empty($kod_ucznia) || empty($nr_zadania) || $liczba_punktow == '';
                 if ($czy_puste_dane) {
@@ -130,7 +130,7 @@ class GeneratorWynikow implements IGenerator {
                 $klasa = substr($kod_ucznia, 0, 1); // $wynik zostawia pierwszy znak, nazwe klasy np. 'A'
                 array_push($dane_do_inserta, "'".$klasa."'");
                 array_push($dane_do_inserta, "'".$kod_ucznia."'");
-                array_push($dane_do_inserta, $nr_zadania);
+                array_push($dane_do_inserta, "'".$nr_zadania."'");
                 array_push($dane_do_inserta, $liczba_punktow);
                 array_push($dane_do_inserta, $this->max_punkntow[$i]);
 

@@ -10,7 +10,7 @@ var LayoutView = Marionette.LayoutView.extend({
         var self = this;
         app.commands.setHandler("show:chart", function(opt) {
             console.log("LayoutView show:chart setHandler", opt);
-            self.chartView = self.controller.initializeChartView();
+            self.chartView = self.controller.initializeChartView(opt.param);
             self.showChildView('main', self.chartView);
             // self.chartView.showChart();
         });
@@ -44,7 +44,7 @@ var LayoutViewController = Marionette.Object.extend({
         return this.headerInstance;
     },
     initializeChartView : function(options) {
-        this.chartInstance = this.chartController.getChartView();
+        this.chartInstance = this.chartController.getChartView(options);
         return this.chartInstance;
     }
 });

@@ -52,9 +52,9 @@ var ChartController = Marionette.Object.extend({
         console.log("ChartController onStart");
     },
 
-    getChartView : function() {
+    getChartView : function(param) {
         var chartView = new ChartView({
-            data : lib.Chart.getJsonData()
+            data : lib.Chart.getJsonData(param)
         });
         return chartView;
     }

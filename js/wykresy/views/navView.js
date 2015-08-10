@@ -23,10 +23,14 @@ var NavComposite = Marionette.CompositeView.extend({
         this.on('childview:item:clicked', function(view) {
             console.log("childview:item:clicked", view.model.get("event"));
             var event = view.model.get("event"), url = view.model.get("url");
+            var param = view.model.get("param");
             if (url) {
                 window.location.pathname = url;
             } else {
-                app.execute(event);
+                app.execute(event, {
+                    event : event,
+                    param : param
+                });
             }
         });
         this.on('logo:clicked', function() {

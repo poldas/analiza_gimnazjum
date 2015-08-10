@@ -1,5 +1,5 @@
 <?php
-class AnalizaDanych {
+class AnalizaDanycsh {
 
     const SQL_SREDNIA_PLEC = "
         select
