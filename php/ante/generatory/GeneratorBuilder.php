@@ -64,6 +64,7 @@ class GeneratorBuilder {
         $this->dodaj_wpis($this->pobierz_sql());
         $this->dodaj_wpis($this->pobierz_sql_obszar());
         $this->dodaj_wpis($this->pobierz_sql_uczniowie());
+        $this->dodaj_wpis($this->pobierz_sql_obszary_zadanie());
     }
     public function pobierz_sql() {
         return $this->generator->pobierz_zapytanie_sql();
@@ -73,6 +74,9 @@ class GeneratorBuilder {
     }
     public function pobierz_sql_obszar() {
         return $this->generator->pobierz_zapytanie_sql_obszar();
+    }
+    public function pobierz_sql_obszary_zadanie() {
+    	return $this->generator->pobierz_zapytanie_sql_obszary_zadanie();
     }
     public function pobierz_dane() {
         return $this->generator->pobierz_dane();

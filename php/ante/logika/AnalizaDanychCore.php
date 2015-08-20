@@ -95,7 +95,6 @@ abstract class AnalizaDanychCore implements AnalizaDanychSql {
         $klasa = $wiersz_danych['klasa'];
         $srednia = $wiersz_danych['srednia_punktow'];
         $obszar = $wiersz_danych['obszar'];
-        $this->obszary[] = $obszar;
         $umiejetnosc = !is_null($wiersz_danych['umiejetnosc']) ? $wiersz_danych['umiejetnosc'] : 'calosc';
 
         // $klucz określa jaką watość ma dane porównanie np lokalizacja m,w, płeć, c,d, dyslekcja 0,1
@@ -132,7 +131,6 @@ abstract class AnalizaDanychCore implements AnalizaDanychSql {
     protected function mapuj_dane($wiersz_danych) {
         $klasa = $wiersz_danych['klasa'];
         $srednia = $wiersz_danych['srednia_punktow'];
-        $this->klasy[] = $klasa;
         if (!is_null($wiersz_danych[self::POROWNANIE_DYSLEKSJA])) {
             $klucz = $wiersz_danych[self::POROWNANIE_DYSLEKSJA];
             $this->dane[self::POROWNANIE_DYSLEKSJA][$klucz][$klasa] = array(

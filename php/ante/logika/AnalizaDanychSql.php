@@ -235,7 +235,7 @@ interface AnalizaDanychSql {
             from wyniki_egzaminu as we
             left join uczniowie as u
                 on u.kod_ucznia = we.kod_ucznia
-            left join obszary as o
+            left join obszary_zadanie as o
                 on o.nr_zadania = we.nr_zadania
              GROUP by o.obszar
             UNION
@@ -249,7 +249,7 @@ interface AnalizaDanychSql {
             from wyniki_egzaminu as we
             left join uczniowie as u
                 on u.kod_ucznia = we.kod_ucznia
-            left join obszary as o
+            left join obszary_zadanie as o
                 on o.nr_zadania = we.nr_zadania
              GROUP by o.obszar, we.klasa
             UNION
@@ -263,7 +263,7 @@ interface AnalizaDanychSql {
             from wyniki_egzaminu as we
             left join uczniowie as u
                 on u.kod_ucznia = we.kod_ucznia
-            left join obszary as o
+            left join obszary_zadanie as o
                 on o.nr_zadania = we.nr_zadania
              GROUP by o.obszar, u.dysleksja
             UNION
@@ -277,7 +277,7 @@ interface AnalizaDanychSql {
             from wyniki_egzaminu as we
             left join uczniowie as u
                 on u.kod_ucznia = we.kod_ucznia
-            left join obszary as o
+            left join obszary_zadanie as o
                 on o.nr_zadania = we.nr_zadania
              GROUP by o.obszar, u.lokalizacja
             UNION
@@ -291,7 +291,7 @@ interface AnalizaDanychSql {
             from wyniki_egzaminu as we
             left join uczniowie as u
                 on u.kod_ucznia = we.kod_ucznia
-            left join obszary as o
+            left join obszary_zadanie as o
                 on o.nr_zadania = we.nr_zadania
              GROUP by o.obszar, u.plec
             UNION
@@ -305,7 +305,7 @@ interface AnalizaDanychSql {
             from wyniki_egzaminu as we
             left join uczniowie as u
                 on u.kod_ucznia = we.kod_ucznia
-            left join obszary as o
+            left join obszary_zadanie as o
                 on o.nr_zadania = we.nr_zadania
              GROUP by o.obszar, we.klasa, u.dysleksja
             UNION
@@ -319,7 +319,7 @@ interface AnalizaDanychSql {
             from wyniki_egzaminu as we
             left join uczniowie as u
                 on u.kod_ucznia = we.kod_ucznia
-            left join obszary as o
+            left join obszary_zadanie as o
                 on o.nr_zadania = we.nr_zadania
              GROUP by o.obszar, we.klasa, u.lokalizacja
             UNION
@@ -333,7 +333,7 @@ interface AnalizaDanychSql {
             from wyniki_egzaminu as we
             left join uczniowie as u
                 on u.kod_ucznia = we.kod_ucznia
-            left join obszary as o
+            left join obszary_zadanie as o
                 on o.nr_zadania = we.nr_zadania
              GROUP by o.obszar, we.klasa, u.plec
             UNION

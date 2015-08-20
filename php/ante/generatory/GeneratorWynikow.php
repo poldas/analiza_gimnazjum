@@ -5,6 +5,8 @@ class GeneratorWynikow implements IGenerator {
     private $nazwa_wyniki_egzaminu = 'wyniki_egzaminu';
     private $nazwa_umiejetnosc_kategoria = 'obszary';
     private $nazwa_uczniowie = 'uczniowie';
+    private $nazwa_obszary_zadanie = 'obszary_zadanie';
+    
     protected $dane = array();
     protected $dane_uczniowie = array();
     protected $zrodlo_danych = '';
@@ -12,6 +14,7 @@ class GeneratorWynikow implements IGenerator {
     protected $zapytanie_sql = '';
     protected $zapytanie_sql_obszar = '';
     protected $zapytanie_sql_uczniowie = '';
+    protected $zapytanie_sql_obszar_zadanie = '';
     protected $nazwy_zadan = 0;
     protected $max_punkntow = array();
     protected $umiejetnosc = array();
@@ -21,6 +24,7 @@ class GeneratorWynikow implements IGenerator {
         $this->ustaw_dane_ze_zrodla_danych();
         $this->generuj_tabela_wyniki_egzaminu();
         $this->generuj_tabela_umiejetnosci_zadania();
+        $this->generuj_tabela_obszary_zadania();
     }
 
     public function generuj_zapytanie_sql_uczniowie() {
@@ -95,7 +99,9 @@ class GeneratorWynikow implements IGenerator {
     public function pobierz_zapytanie_sql_obszar() {
         return $this->zapytanie_sql_obszar;
     }
-
+    public function pobierz_zapytanie_sql_obszary_zadanie() {
+    	return $this->zapytanie_sql_obszar_zadanie;
+    }
     public function pobierz_zapytanie_sql_uczniowie() {
         return $this->zapytanie_sql_uczniowie;
     }
@@ -188,6 +194,23 @@ class GeneratorWynikow implements IGenerator {
         $this->zapytanie_sql_obszar = $sql;
     }
 
+    protected function generuj_tabela_obszary_zadania() {
+    	$liczba_elementow = count($this->obszar);
+    	$dane_do_inserta = array();
+    	for ($i = 0; $i < $liczba_elementow; $i++) {
+    		$tmp = array();
+    		$obszar = trim($this->obszar[$i]);
+    		$zadanie = trim($this->nazwy_zadan[$i]);
+    		array_push($tmp, "'".$obszar."'");
+            array_push($tmp, "'".$zadanie."'");
+            array_push($dane_do_inserta, '('.join(',', $tmp).')');
+    	}
+    
+    	$dane  = join(',', $dane_do_inserta);
+    	$sql = $dane ? "INSERT INTO ".$this->nazwa_obszary_zadanie." VALUES ".$dane.";" : '';
+    	$this->zapytanie_sql_obszar_zadanie = $sql;
+    }
+    
     /**
      * Generuje zapytanie do tablei obszar
      *
