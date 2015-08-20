@@ -3,10 +3,16 @@ var NavCollection = Backbone.Collection.extend({
     model : NavModel
 });
 var navItems = [ {
+    name : "Test",
+    event : "show:chart",
+    id : "statystyka-all",
+    param : 'all',
+    url : ""
+}, {
     name : "Stat całość",
     event : "show:chart",
     id : "statystyka-calosc",
-    param : 'calosc',
+    param : 'srednia',
     url : ""
 }, {
     name : "Lokalizacja",
@@ -30,13 +36,13 @@ var navItems = [ {
     name : "Zadania",
     event : "show:chart",
     id : "statystyka-zadania",
-    param : 'zadania&klasa=A&rodzaj_danych=dysleksja',
+    param : 'zadania',
     url : ""
 }, {
     name : "Obszary",
     event : "show:chart",
     id : "statystyka-obszar",
-    param : 'obszar=II&klasa=A&rodzaj_danych=dysleksja',
+    param : 'obszar=I&klasa=A&rodzaj_danych=dysleksja',
     url : ""
 }, {
     name : "Usuń wykres",

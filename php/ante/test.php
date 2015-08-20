@@ -11,13 +11,10 @@ function autoloader($nazwa_klasy) {
 }
 spl_autoload_register('autoloader');
 $generator = new GeneratorBuilder();
-$generator->ustaw_zrodlo_danych('../../dane/wyniki.csv');
+// $generator->ustaw_zrodlo_danych('../../dane/Dane dla Daniela kl II 2015l.csv');
+$generator->ustaw_zrodlo_danych('../../dane/Dane egz 2015 dla Daniela.csv');
 $generator->generuj_zapytanie_sql();
-$generator->ustaw_zrodlo_danych_uczniowie('../../dane/uczniowie.csv');
-$generator->generuj_zapytanie_sql_uczniowie();
 // $generator->dodaj_dane_automatycznie();
-// $generator->dodaj_wpis($generator->pobierz_sql());
-// $generator->dodaj_wpis($generator->pobierz_sql_uczniowie());
 
 ?>
 </pre>

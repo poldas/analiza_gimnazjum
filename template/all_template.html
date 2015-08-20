@@ -22,28 +22,96 @@
 
 
 
+  <script type="text/template" id="nav-template-static">
+<div class="container-fluid" id="app-layout-container">
+    <div class="row">
+        <div class="col-md-12">
+           <nav class="navbar navbar-default navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed"
+                data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span> <span
+                    class="icon-bar"></span> <span class="icon-bar"></span> <span
+                    class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">Analiza</a>
+        </div>
 
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse"
+            id="bs-example-navbar-collapse-1">
+            <ul id="navitem-template" class="nav navbar-nav">
 
-    <script type="text/template" id="formView">
-    <h2>New User </h2>
-<form class="navbar-form navbar-left" role="search">
-  <div class="form-group">
-    <input type="text" id="name" class="form-control" placeholder="Nazwisko">
-    <input type="text" id="age" class="form-control" placeholder="Wiek">
-  </div>
-  <button type="submit" class="btn btn-lg btn-success">Create</button>
-</form>
+            </ul>
+            <form class="navbar-form navbar-left" role="search">
+                <div class="form-group">
+                    <input type="text" class="form-control" placeholder="Search">
+                </div>
+                <button type="submit" class="btn btn-default">Submit</button>
+            </form>
+            <ul class="nav navbar-nav navbar-right">
+                <li><a href="#">Link</a></li>
+                <li class="dropdown"><a href="#" class="dropdown-toggle"
+                    data-toggle="dropdown" role="button" aria-expanded="false">Dropdown
+                        <span class="caret"></span>
+                </a>
+                    <ul class="dropdown-menu" role="menu">
+                        <li><a href="#">Action</a></li>
+                        <li><a href="#">Another action</a></li>
+                        <li><a href="#">Something else here</a></li>
+                        <li class="divider"></li>
+                        <li><a href="#">Separated link</a></li>
+                    </ul></li>
+            </ul>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container-fluid -->
+</nav>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-4">
+            <div class="panel-group" id="panel-459175">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                         <a class="panel-title" data-toggle="collapse" data-parent="#panel-459175" href="#panel-element-445147">Collapsible Group Item #1</a>
+                    </div>
+                    <div id="panel-element-445147" class="panel-collapse collapse in">
+                        <div class="panel-body">
+                            Anim pariatur cliche...
+                        </div>
+                    </div>
+                </div>
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                         <a class="panel-title collapsed" data-toggle="collapse" data-parent="#panel-459175" href="#panel-element-256280">Collapsible Group Item #2</a>
+                    </div>
+                    <div id="panel-element-256280" class="panel-collapse collapse">
+                        <div class="panel-body">
+                            Anim pariatur cliche...
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-8">
+            <h2>
+                Heading
+            </h2>
+            <p>
+                Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui.
+            </p>
+            <p>
+                <a class="btn" href="#">View details »</a>
+            </p>
+        </div>
+    </div>
+</div>
 </script>
-    <script type="text/template" id="userView">
-    <h2>nazwa <%= name %> Age: <%= age %></h2>
-</script>
-    <script type="text/template" id="usersView">
-    <h2> Users </h2>
-</script>
-    <script type="text/template" id="nousersView">
-    <h2>No Users </h2>
-</script>
-    </script>
+<!-- template dla navigacji -->
     <script type="text/template" id="nav-template">
     <nav class="navbar navbar-default navbar-fixed-top">
     <div class="container-fluid">

@@ -1,5 +1,9 @@
 var NavItemView = Marionette.ItemView
         .extend({
+            attributes : {
+                "data-spy" : "affix",
+                "data-offset-top" : "60"
+            },
             tagName : 'li',
             triggers : {
                 "click a" : 'item:clicked'
@@ -21,7 +25,6 @@ var NavComposite = Marionette.CompositeView.extend({
     },
     initialize : function() {
         this.on('childview:item:clicked', function(view) {
-            console.log("childview:item:clicked", view.model.get("event"));
             var event = view.model.get("event"), url = view.model.get("url");
             var param = view.model.get("param");
             if (url) {
@@ -42,10 +45,14 @@ var NavComposite = Marionette.CompositeView.extend({
 var NavController = Marionette.Object.extend({
     initialize : function(options) {
     },
-    onStart : function() {
-        console.log("on start constoller");
-    },
     getHeaderView : function(options) {
+        var navItemss = app.reqres.request("get:header:items");
+        var navView = new NavComposite({
+            collection : new NavCollection(navItemss)
+        });
+        return navView;
+    },
+    getHeaderViewStick : function(options) {
         var navItemss = app.reqres.request("get:header:items");
         var navView = new NavComposite({
             collection : new NavCollection(navItemss)

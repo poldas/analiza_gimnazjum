@@ -63,6 +63,7 @@ class GeneratorBuilder {
     public function dodaj_dane_automatycznie() {
         $this->dodaj_wpis($this->pobierz_sql());
         $this->dodaj_wpis($this->pobierz_sql_obszar());
+        $this->dodaj_wpis($this->pobierz_sql_uczniowie());
     }
     public function pobierz_sql() {
         return $this->generator->pobierz_zapytanie_sql();

@@ -449,5 +449,9 @@ interface AnalizaDanychSql {
                 on o.nr_zadania = we.nr_zadania
              GROUP by o.obszar, o.umiejetnosc, we.klasa, u.plec
             ";
+
+    const CZESTOSC_WYNIKOW = "
+            select count(1), b.suma from (select sum(w.liczba_punktow) as suma, w.kod_ucznia from wyniki_egzaminu w group by w.kod_ucznia) as b group by b.suma;
+            ";
 }
 ?>

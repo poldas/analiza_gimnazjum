@@ -51,21 +51,23 @@ class GeneratorWynikow implements IGenerator {
 
     private function parsuj_dane($dane_do_sparsowania) {
         // usuwamy nagłówek który jest numerami zadan
-        $this->umiejetnosc = array_shift($dane_do_sparsowania);
-        $this->umiejetnosc = $this->usun_pierwszy_element($this->umiejetnosc);
-        $this->umiejetnosc = explode(',', $this->umiejetnosc);
+        $this->nazwy_zadan = array_shift($dane_do_sparsowania);
+        $this->nazwy_zadan = $this->usun_pierwszy_element($this->nazwy_zadan);
+        $this->nazwy_zadan = explode(',', $this->nazwy_zadan);
 
         $this->obszar = array_shift($dane_do_sparsowania);
         $this->obszar = $this->usun_pierwszy_element($this->obszar);
         $this->obszar = explode(',', $this->obszar);
 
+        $this->umiejetnosc = array_shift($dane_do_sparsowania);
+        $this->umiejetnosc = $this->usun_pierwszy_element($this->umiejetnosc);
+        $this->umiejetnosc = explode(',', $this->umiejetnosc);
+
+
         $this->max_punkntow = array_shift($dane_do_sparsowania);
         $this->max_punkntow = $this->usun_pierwszy_element($this->max_punkntow);
         $this->max_punkntow = explode(',', $this->max_punkntow);
 
-        $this->nazwy_zadan = array_shift($dane_do_sparsowania);
-        $this->nazwy_zadan = $this->usun_pierwszy_element($this->nazwy_zadan);
-        $this->nazwy_zadan = explode(',', $this->nazwy_zadan);
         return $dane_do_sparsowania;
     }
 
@@ -101,17 +103,36 @@ class GeneratorWynikow implements IGenerator {
     private function usun_pierwszy_element($wiersz){
         $tablica_wiersz = explode(',', $wiersz);
         array_shift($tablica_wiersz);
+        array_pop($tablica_wiersz);
+        array_pop($tablica_wiersz);
+        array_pop($tablica_wiersz);
         return join(',', $tablica_wiersz);
     }
 
     private function generuj_tabela_wyniki_egzaminu($dane = null) {
         $dane_zapytania_sql = array();
+        $dane_zapytania_sql_uczniowie = array();
         $dane = is_null($dane) ? $this->dane : $dane;
 
         foreach ($dane as $wiersz) {
+            $tmp = array();
             // z ciagu "A1,1,2,0,1,0..." tworzy tablicę i usuwa pierwszy element kod ucznia
             $tablica_wiersz = explode(',', $wiersz);
             $kod_ucznia = array_shift($tablica_wiersz);
+            $lokalizacja = array_pop($tablica_wiersz);
+            $dysleksja = array_pop($tablica_wiersz);
+            $plec = array_pop($tablica_wiersz);
+            $nr_ucznia = preg_replace("/[^0-9]/", '', $kod_ucznia);
+            $klasa = preg_replace("/[0-9]/", '', $kod_ucznia);
+            /* wpisy do uczniów*/
+            array_push($tmp, "'".trim($nr_ucznia)."'");
+            array_push($tmp, "'".trim($kod_ucznia)."'");
+            array_push($tmp, "'".trim($klasa)."'");
+            array_push($tmp, "'".trim($plec)."'");
+            array_push($tmp, "'".trim($dysleksja)."'");
+            array_push($tmp, "'".trim($lokalizacja)."'");
+            $dane_zapytania_sql_uczniowie[] = "(".join(',', $tmp).")";
+
             foreach ($tablica_wiersz as $i => $liczba_punktow) {
                 // dane kol1, kol2, kol3 itd. do pojedynczego inserta w nawiasach (kol1, kol2, kol3, ...)
                 // resetowane dla każdego wpisu
@@ -126,6 +147,8 @@ class GeneratorWynikow implements IGenerator {
                     print_r($err_dane);
                     return;
                 }
+
+                /* wpisy do wyników*/
                 // przygotowanie pojedynczego wpisu kolejność jest istotna
                 $klasa = substr($kod_ucznia, 0, 1); // $wynik zostawia pierwszy znak, nazwe klasy np. 'A'
                 array_push($dane_do_inserta, "'".$klasa."'");
@@ -133,17 +156,20 @@ class GeneratorWynikow implements IGenerator {
                 array_push($dane_do_inserta, "'".$nr_zadania."'");
                 array_push($dane_do_inserta, $liczba_punktow);
                 array_push($dane_do_inserta, $this->max_punkntow[$i]);
-
                 // dodanie wpisu w postaci gotowej do zapytania sql
                 $dane_zapytania_sql[] = '('.join(',', $dane_do_inserta).')';
             }
 
         }
         // zapytanie końcowe sql
-        $dane  = join(',', $dane_zapytania_sql);
-        $sql = $dane ? "INSERT INTO ".$this->nazwa_wyniki_egzaminu." VALUES ".$dane.";" : '';
-
+        $dane_wyniki = join(',', $dane_zapytania_sql);
+        $sql = $dane_wyniki ? "INSERT INTO ".$this->nazwa_wyniki_egzaminu." VALUES ".$dane_wyniki.";" : '';
         $this->zapytanie_sql = $sql;
+
+        // zapytanie końcowe sql
+        $dane_uczniowie  = join(',', $dane_zapytania_sql_uczniowie);
+        $sql = $dane_uczniowie ? "INSERT INTO ".$this->nazwa_uczniowie." VALUES ".$dane_uczniowie.";" : '';
+        $this->zapytanie_sql_uczniowie = $sql;
         return $sql;
     }
 
@@ -179,35 +205,6 @@ class GeneratorWynikow implements IGenerator {
             array_push($tmp, "'".$zadanie."'");
             array_push($dane_do_inserta, '('.join(',', $tmp).')');
         }
-    }
-
-    public function generuj_tabela_uczniowie() {
-        $dane = $this->dane_uczniowie;
-        $dane_zapytania_sql = array();
-
-        foreach ($dane as $wiersz) {
-            $tmp = array();
-            $wiersz_tablica = explode(',', $wiersz);
-            $kod_ucznia = $wiersz_tablica[0];
-            $nr_ucznia = preg_replace("/[^0-9]/", '', $kod_ucznia);
-            $klasa = preg_replace("/[0-9]/", '', $kod_ucznia);
-            $plec = $wiersz_tablica[1];
-            $lokalizacja = $wiersz_tablica[2];
-            $czy_dysleksja = (bool)trim($wiersz_tablica[3]);
-            array_push($tmp, "'".trim($nr_ucznia)."'");
-            array_push($tmp, "'".trim($kod_ucznia)."'");
-            array_push($tmp, "'".trim($klasa)."'");
-            array_push($tmp, "'".trim($plec)."'");
-            array_push($tmp, "'".trim($czy_dysleksja)."'");
-            array_push($tmp, "'".trim($lokalizacja)."'");
-            $dane_zapytania_sql[] = "(".join(',', $tmp).")";
-        }
-
-        // zapytanie końcowe sql
-        $dane  = join(',', $dane_zapytania_sql);
-        $sql = $dane ? "INSERT INTO ".$this->nazwa_uczniowie." VALUES ".$dane.";" : '';
-        $this->zapytanie_sql_uczniowie = $sql;
-        return $sql;
     }
 }
 ?>
