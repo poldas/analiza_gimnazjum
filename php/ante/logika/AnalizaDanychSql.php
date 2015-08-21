@@ -451,7 +451,133 @@ interface AnalizaDanychSql {
             ";
 
     const CZESTOSC_WYNIKOW = "
-            select count(1), b.suma from (select sum(w.liczba_punktow) as suma, w.kod_ucznia from wyniki_egzaminu w group by w.kod_ucznia) as b group by b.suma;
+            select count(1), b.suma 
+    		from (
+    			select sum(w.liczba_punktow) as suma, w.kod_ucznia 
+    				from wyniki_egzaminu w 
+    				group by w.kod_ucznia) as b group by b.suma
+            ";
+    const CZESTOSC_WYNIKOW_DYSLEKSJA = "
+            select count(1) as ilosc_wynikow,
+    			b.suma,
+    			null dysleksja,
+                null lokalizacja,
+                null plec,
+    			'szkola' klasa
+    		from (
+    			select sum(w.liczba_punktow) as suma, w.kod_ucznia
+    				from wyniki_egzaminu w
+    				group by w.kod_ucznia) as b 
+    		group by b.suma
+    		UNION
+    		select count(1) as ilosc_wynikow,
+    			b.suma,
+    			null dysleksja,
+                null lokalizacja,
+                null plec,
+    			b.klasa
+    		from (
+    			select sum(w.liczba_punktow) as suma, 
+    				w.kod_ucznia,
+    				u.klasa
+    				from wyniki_egzaminu w
+    				left join uczniowie u
+    					on w.kod_ucznia = u.kod_ucznia
+    				group by w.kod_ucznia) as b 
+    		group by b.suma, b.klasa
+    		UNION
+    		select count(1) as ilosc_wynikow,
+    			b.suma,
+    			b.dysleksja,
+    			null lokalizacja,
+                null plec,
+    			'szkola' klasa
+    		from (
+    			select sum(w.liczba_punktow) as suma, 
+    				u.dysleksja
+    				from wyniki_egzaminu w
+    				left join uczniowie u
+    					on w.kod_ucznia = u.kod_ucznia
+    				group by w.kod_ucznia, u.dysleksja) as b 
+    		group by b.suma, b.dysleksja
+    		UNION
+    		select count(1) as ilosc_wynikow,
+    			b.suma,
+    			null dysleksja,
+    			b.lokalizacja,
+                null plec,
+    			'szkola' klasa
+    		from (
+    			select sum(w.liczba_punktow) as suma, 
+    				u.lokalizacja
+    				from wyniki_egzaminu w
+    				left join uczniowie u
+    					on w.kod_ucznia = u.kod_ucznia
+    				group by w.kod_ucznia, u.lokalizacja) as b 
+    		group by b.suma, b.lokalizacja
+    		UNION
+    		select count(1) as ilosc_wynikow,
+    			b.suma,
+    			null dysleksja,
+    			null lokalizacja,
+                b.plec,
+    			'szkola' klasa
+    		from (
+    			select sum(w.liczba_punktow) as suma, 
+    				u.plec
+    				from wyniki_egzaminu w
+    				left join uczniowie u
+    					on w.kod_ucznia = u.kod_ucznia
+    				group by w.kod_ucznia, u.plec) as b 
+    		group by b.suma,b.plec
+    		UNION
+    		select count(1) as ilosc_wynikow,
+    			b.suma,
+    			b.dysleksja,
+    			null lokalizacja,
+                null plec,
+    			b.klasa
+    		from (
+    			select sum(w.liczba_punktow) as suma, 
+    				u.dysleksja,
+    				u.klasa
+    				from wyniki_egzaminu w
+    				left join uczniowie u
+    					on w.kod_ucznia = u.kod_ucznia
+    				group by w.kod_ucznia, u.dysleksja) as b 
+    		group by b.suma, b.dysleksja, b.klasa
+    		UNION
+    		select count(1) as ilosc_wynikow,
+    			b.suma,
+    			null dysleksja,
+    			b.lokalizacja,
+                null plec,
+    			b.klasa
+    		from (
+    			select sum(w.liczba_punktow) as suma, 
+    				u.lokalizacja,
+    				u.klasa
+    				from wyniki_egzaminu w
+    				left join uczniowie u
+    					on w.kod_ucznia = u.kod_ucznia
+    				group by w.kod_ucznia, u.lokalizacja) as b 
+    		group by b.suma, b.lokalizacja, b.klasa
+    		UNION
+    		select count(1) as ilosc_wynikow,
+    			b.suma,
+    			null dysleksja,
+    			null lokalizacja,
+                b.plec,
+    			b.klasa
+    		from (
+    			select sum(w.liczba_punktow) as suma, 
+    				u.plec,
+    				u.klasa
+    				from wyniki_egzaminu w
+    				left join uczniowie u
+    					on w.kod_ucznia = u.kod_ucznia
+    				group by w.kod_ucznia, u.plec) as b 
+    		group by b.suma, b.plec, b.klasa
             ";
 }
 ?>
