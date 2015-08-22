@@ -28,6 +28,68 @@ class AnalizaDanych extends AnalizaDanychCore {
         }
     }
 
+    public function porownanie($get) {
+    	$rodzaj_danych = explode(',', $get['rodzaj_danych']);
+    	$rodzaj_danych = 'calosc';
+//     	$grupa = explode(',', $get['grupa']);
+//     	$klasa = explode(',', $get['klasa']);
+    	if (empty($this->dane)) {
+    		$this->przygotuj_dane();
+    	}
+        $konfiguracja = array(
+            array (
+                'label' => 'Klasa',
+                'type' => 'string'
+            ),
+            array (
+                'label' => 'Dziewczynki',
+                'type' => 'number'
+            )
+        );
+        $rows = array ();
+        $table = array ();
+        $dane_db = $this->dane[$rodzaj_danych];
+        $klucze = array_keys($dane_db);
+        $table ['cols'] = $konfiguracja;
+        foreach($dane_db[$klucze[0]] as $klasa => $wiesz_danych) {
+            $temp = array ();
+            $temp [] = array (
+                    'v' => ( string ) $klasa
+            );
+            $temp [] = array (
+                    'v' => ( float ) $dane_db[$klucze[0]][$klasa]["srednia_punktow"]
+            );
+            // jeżeli jest drugi klucz (np. porównanie chłopcy dziewczynki)
+            if (isset($klucze[1])) {
+                $temp [] = array (
+                        'v' => ( float ) $dane_db[$klucze[1]][$klasa]["srednia_punktow"]
+                );
+            }
+            $rows [] = array ('c' => $temp);
+        }
+
+        $table ['rows'] = $rows;
+        $ar = array();
+		$ar[] = array(
+				'data' => $table
+		);
+		$ar[] = array(
+				'data' => $table
+		);
+		$ar[] = array(
+				'data' => $table
+		);
+		$ar[] = array(
+				'data' => $table
+		);
+		$ar[] = array(
+				'data' => $table
+		);
+		$ar[] = array(
+				'data' => $table
+		);
+        echo $this->koduj_json($ar);
+    }
     public function pobierz_porownanie($get) {
         if (isset($get[AnalizaDanychCore::POROWNANIE_PLEC])) {
             echo $this->_pobierz_porownanie(AnalizaDanychCore::POROWNANIE_PLEC);
@@ -71,11 +133,15 @@ class AnalizaDanych extends AnalizaDanychCore {
                 );
             }
         }
+        return $this->koduj_json($dane);
     }
     public function pobierz_dane_porownanie_srednia() {
         return $this->pobierz_dane_porownanie_srednia_calosc();
     }
     public function pobierz_dane_porownanie_srednia_calosc($konfig) {
+    	if (empty($this->dane)) {
+    		$this->przygotuj_dane();
+    	}
         $konfiguracja = array(
             array (
                 'label' => 'Klasa',
@@ -90,6 +156,9 @@ class AnalizaDanych extends AnalizaDanychCore {
     }
 
     public function pobierz_dane_porownanie_srednia_plec() {
+    	if (empty($this->dane)) {
+    		$this->przygotuj_dane();
+    	}
         $konfiguracja = array(
             array (
                 'label' => 'Klasa',
@@ -108,6 +177,9 @@ class AnalizaDanych extends AnalizaDanychCore {
     }
 
     public function pobierz_dane_porownanie_srednia_lokalizacja() {
+    	if (empty($this->dane)) {
+    		$this->przygotuj_dane();
+    	}
         $konfiguracja = array(
             array (
                 'label' => 'Klasa',
@@ -126,6 +198,9 @@ class AnalizaDanych extends AnalizaDanychCore {
     }
 
     public function pobierz_dane_porownanie_srednia_dysleksja() {
+    	if (empty($this->dane)) {
+    		$this->przygotuj_dane();
+    	}
         $konfiguracja = array(
             array (
                 'label' => 'Klasa',
@@ -144,6 +219,9 @@ class AnalizaDanych extends AnalizaDanychCore {
     }
 
     public function pobierz_dane_porownanie_srednia_obszar($konfig) {
+    	if (empty($this->dane_obszar)) {
+    		$this->przygotuj_dane_obszar();
+    	}
         $konfiguracja = array(
                 array (
                         'label' => 'Umiejętności dla '.$konfig['rodzaj_danych'],
@@ -176,6 +254,9 @@ class AnalizaDanych extends AnalizaDanychCore {
     }
 
     public function pobierz_dane_porownanie_srednia_zadania($konfig) {
+    	if (empty($this->dane_zadania)) {
+    		$this->przygotuj_dane_zadania();
+    	}
         $konfiguracja = array(
             array (
                 'label' => 'Zadania',

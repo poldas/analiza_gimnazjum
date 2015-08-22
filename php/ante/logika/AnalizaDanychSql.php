@@ -9,56 +9,6 @@ interface AnalizaDanychSql {
     const POROWNANIE_SREDNIA = 'srednia';
     const POROWNANIE_OBSZAR = 'obszar';
 
-    const SQL_LATWOSC_KLASA_ZADANIE = "
-        select
-            we.klasa,
-            we.nr_zadania,
-            sum(we.liczba_punktow)/sum(we.max_punktow) as srednia_punktow
-        from wyniki_egzaminu as we
-        group by we.nr_zadania, we.klasa
-    ";
-
-    const SQL_LATWOSC_SZKOLA_ZADANIE = "
-        select
-            we.nr_zadania,
-            sum(we.liczba_punktow)/sum(we.max_punktow) as srednia_punktow
-        from wyniki_egzaminu as we
-        group by we.nr_zadania
-    ";
-
-    const SQL_LATWOSC_SZKOLA_MIEJSCOWOSC = "
-        select
-            we.nr_zadania,
-            sum(we.liczba_punktow)/sum(we.max_punktow) as srednia_punktow
-            u.miejscowosc
-        from wyniki_egzaminu as we
-        left join uczniowie as u
-            on u.kod_ucznia = we.kod_ucznia
-        group by we.nr_zadania, u.miejscowosc
-    ";
-
-    const SQL_LATWOSC_SZKOLA_DYSLEKSJA  = "
-        select
-            we.nr_zadania,
-            avg(we.liczba_punktow) as we.srednia_punktow,
-            u.dysleksja
-        from wyniki_egzaminu as we
-        left join uczniowie as u
-            on u.kod_ucznia = we.kod_ucznia
-        group by we.nr_zadania, u.dysleksja
-    ";
-
-    const SQL_LATWOSC_SZKOLA_PLEC = "
-        select
-            we.nr_zadania,
-            avg(we.liczba_punktow) as we.srednia_punktow,
-            u.plec
-        from wyniki_egzaminu as we
-        left join uczniowie as u
-            on u.kod_ucznia = we.kod_ucznia
-        group by we.nr_zadania, u.plec
-    ";
-
     const UNION_ALL_SREDNIA = "
             select sum(we.liczba_punktow)/sum(we.max_punktow) as srednia_punktow,
                 null dysleksja,

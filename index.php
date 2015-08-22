@@ -108,6 +108,7 @@ spl_autoload_register ( 'autoloader' );
     <script type="text/javascript" src="js/wykresy/views/chartView.js"></script>
         <script type="text/javascript" src="js/wykresy/views/chartViewCollection.js"></script>
     <script type="text/javascript" src="js/wykresy/views/navView.js"></script>
+        <script type="text/javascript" src="js/wykresy/views/navViewStatic.js"></script>
     <script type="text/javascript" src="js/wykresy/views/layoutView.js"></script>
     <script type="text/javascript"
         src="js/wykresy/views/layoutViewStatic.js"></script>

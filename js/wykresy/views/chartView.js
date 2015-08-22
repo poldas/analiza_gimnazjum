@@ -9,6 +9,7 @@ var ChartView = Marionette.ItemView.extend({
         Marionette.ItemView.apply(this, arguments);
     },
     initialize : function(options) {
+    	console.log(options);
         this.data = options.data;
         this.showChart();
         this.chart = new google.charts.Bar(this.el);
@@ -26,6 +27,7 @@ var ChartView = Marionette.ItemView.extend({
 });
 var ChartController = Marionette.Object.extend({
     getChartView : function(param) {
+    	console.log(param);
         var chartView = new ChartView({
             data : lib.Chart.getJsonData(param)
         });

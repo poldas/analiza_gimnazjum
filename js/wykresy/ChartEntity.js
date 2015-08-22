@@ -6,7 +6,7 @@ var navItems = [ {
     name : "Test",
     event : "show:chart",
     id : "statystyka-all",
-    param : 'all',
+    param : 'rodzaj_danych=srednia&klasa=szkola,A&grupa=all',
     url : ""
 }, {
     name : "Stat całość",

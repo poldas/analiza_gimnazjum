@@ -62,6 +62,8 @@ var LayoutView = Marionette.LayoutView
                                                         + "rodzaj_danych="
                                                         + opt.param
                                                         + "&klasa=A");
+                                        self.showChildView('o1klasaA',
+                                                self.o1klasaA);
                                         self.o1klasaB = self.controller
                                                 .initializeChartView("obszar=I&"
                                                         + "rodzaj_danych="
@@ -87,8 +89,6 @@ var LayoutView = Marionette.LayoutView
                                                         + "rodzaj_danych="
                                                         + opt.param
                                                         + "&klasa=F");
-                                        self.showChildView('o1klasaA',
-                                                self.o1klasaA);
                                         self.showChildView('o1klasaB',
                                                 self.o1klasaB);
                                         self.showChildView('o1klasaC',

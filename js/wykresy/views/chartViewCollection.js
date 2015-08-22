@@ -1,8 +1,7 @@
 var ChartView2 = Marionette.ItemView.extend({
     tagName : "div",
     attributes : {
-        "style" : "height: 500px;",
-        "data-foo" : "bar"
+        "style" : "height: 400px;"
     },
     template : false,
     initialize : function(options) {
@@ -24,12 +23,11 @@ var ChartListView = Marionette.CollectionView.extend({
     tagName : 'div',
     childView : ChartView2
 });
-
 var ChartCollectionController = Marionette.Object.extend({
     getChartViewCollection : function(param) {
         var data = lib.Chart.getData(param);
         return new ChartListView({
-            collection : new Backbone.Collection(data)
+            collection : new Backbone.Collection(JSON.parse(data))
         });
     }
 });

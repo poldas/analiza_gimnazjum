@@ -1,5 +1,5 @@
 var app = new App();
 app.start({
-    mainLayout : LayoutView,
+    mainLayout : LayoutViewStatic,
     mainRegion : "#app-container"
 });

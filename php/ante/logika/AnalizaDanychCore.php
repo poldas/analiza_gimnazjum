@@ -2,6 +2,11 @@
 include 'AnalizaDanychSql.php';
 abstract class AnalizaDanychCore implements AnalizaDanychSql {
 
+	protected $grupa = array(
+			self::POROWNANIE_LOKALIZACJA,
+			self::POROWNANIE_PLEC
+	);
+	
     protected $dbhandler = null;
     protected $dane_db = array();
     protected $dane = array();
@@ -13,9 +18,9 @@ abstract class AnalizaDanychCore implements AnalizaDanychSql {
 
     public function __construct() {
         $this->dbhandler = DBconnect::connect();
-        $this->przygotuj_dane();
-        $this->przygotuj_dane_zadania();
-        $this->przygotuj_dane_obszar();
+//         $this->przygotuj_dane();
+//         $this->przygotuj_dane_zadania();
+//         $this->przygotuj_dane_obszar();
     }
 
     protected function pobierz_dane_db($sql) {
@@ -49,6 +54,13 @@ abstract class AnalizaDanychCore implements AnalizaDanychSql {
         }
     }
 
+    protected function przygotuj_dane_obszar() {
+    	$dane_db = $this->pobierz_dane_db ( self::UNION_ALL_SREDNIA_OBSZAR_UMIEJETNOSC );
+    	foreach ($dane_db as $wiersz_danych) {
+    		$this->mapuj_dane_obszar($wiersz_danych);
+    	}
+    }
+    
     /**
      * TODO mapuje dane do odpowiedniej architektury tablicy
      */
@@ -56,7 +68,6 @@ abstract class AnalizaDanychCore implements AnalizaDanychSql {
         $klasa = $wiersz_danych['klasa'];
         $srednia = $wiersz_danych['srednia_punktow'];
         $nr_zadania = $wiersz_danych['nr_zadania'];
-
         // $klucz określa jaką watość ma dane porównanie np lokalizacja m,w, płeć, c,d, dyslekcja 0,1
         if (!is_null($wiersz_danych[self::POROWNANIE_DYSLEKSJA])) {
             $klucz = $wiersz_danych[self::POROWNANIE_DYSLEKSJA];
@@ -82,12 +93,6 @@ abstract class AnalizaDanychCore implements AnalizaDanychSql {
                     'srednia_punktow' => $srednia,
                     'klasa' => $klasa
             );
-        }
-    }
-    protected function przygotuj_dane_obszar() {
-        $dane_db = $this->pobierz_dane_db ( self::UNION_ALL_SREDNIA_OBSZAR_UMIEJETNOSC );
-        foreach ($dane_db as $wiersz_danych) {
-            $this->mapuj_dane_obszar($wiersz_danych);
         }
     }
 
@@ -130,6 +135,7 @@ abstract class AnalizaDanychCore implements AnalizaDanychSql {
      */
     protected function mapuj_dane($wiersz_danych) {
         $klasa = $wiersz_danych['klasa'];
+        $this->klasy[] = $klasa;
         $srednia = $wiersz_danych['srednia_punktow'];
         if (!is_null($wiersz_danych[self::POROWNANIE_DYSLEKSJA])) {
             $klucz = $wiersz_danych[self::POROWNANIE_DYSLEKSJA];
@@ -161,6 +167,9 @@ abstract class AnalizaDanychCore implements AnalizaDanychSql {
     protected function formatuj_do_datatable($rodzaj_danych, $konfiguracja) {
         $rows = array ();
         $table = array ();
+        if (empty($this->dane)) {
+        	$this->przygotuj_dane();
+        }
         $dane_db = $this->dane[$rodzaj_danych];
         $klucze = array_keys($dane_db);
         $table ['cols'] = $konfiguracja;
@@ -190,6 +199,7 @@ abstract class AnalizaDanychCore implements AnalizaDanychSql {
         $rows = array ();
         $table = array ();
         $obszar = $konfig['obszar'];
+        $this->obszary[] = $obszar;
         $umiejetnosci = array_keys($this->dane_obszar[$obszar]);
         arsort($umiejetnosci);
         $rodzaj_danych = $konfig['rodzaj_danych'];
@@ -225,6 +235,10 @@ abstract class AnalizaDanychCore implements AnalizaDanychSql {
     protected function formatuj_do_datatable_zadania($rodzaj_danych, $konfiguracja, $konfig) {
         $rows = array ();
         $table = array ();
+        
+        if (empty($this->dane_zadania)) {
+        	$this->przygotuj_dane_zadania();
+        }
         $zadania = array_keys($this->dane_zadania);
         $klasa = $konfig['klasa'];
         natsort($zadania);

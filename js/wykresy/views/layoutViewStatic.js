@@ -1,18 +1,15 @@
 var LayoutViewStatic = Marionette.LayoutView.extend({
-    template : "#app-container",
+    template : "#layout-static-template",
     regions : {
-        main : "#main-region",
-        header : "#header-region"
+        main : "#main-content",
+        sidebar : "#sidebar-wrapper"
     },
     initialize : function(options) {
-        console.log('tutaj');
         this.controller = new LayoutViewControllerStatic();
         var self = this;
         app.commands.setHandler("show:chart", function(opt) {
-            console.log(opt);
-            self.chartView = self.controller.initializeChartView(opt.collection);
+            self.chartView = self.controller.initializeChartView(opt);
             self.showChildView('main', self.chartView);
-            // self.chartView.showChart();
         });
         app.commands.setHandler("close:chart", function() {
             var view = self.getRegion("main").empty();
@@ -23,21 +20,21 @@ var LayoutViewStatic = Marionette.LayoutView.extend({
     },
     onBeforeShow : function(options) {
         this.navView = this.controller.initializeNavBar();
-        this.showChildView('header', this.navView);
+        this.showChildView('sidebar', this.navView);
     }
 });
 
 var LayoutViewControllerStatic = Marionette.Object.extend({
     initialize : function(options) {
-        this.headerController = new NavController();
+        this.headerController = new NavControllerStatic();
         this.chartController = new ChartCollectionController();
     },
     initializeNavBar : function(options) {
-        this.headerInstance = this.headerController.getHeaderView();
+        this.headerInstance = this.headerController.getHeaderViewStatic();
         return this.headerInstance;
     },
     initializeChartView : function(options) {
-        this.chartInstance = this.chartController.getChartViewCollection();
+        this.chartInstance = this.chartController.getChartViewCollection(options.param);
         return this.chartInstance;
     }
 });

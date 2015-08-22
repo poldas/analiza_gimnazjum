@@ -16,7 +16,6 @@ var App = Marionette.Application.extend({
         var self = this;
         this.reqres.setHandler("get:header:items", function() {
             return self.entityController.getItems();
-
         });
         this.commands.setHandler("load:google", function(callback) {
             var load = google.load('visualization', '1.1', {
