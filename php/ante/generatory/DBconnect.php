@@ -1,6 +1,8 @@
 <?php
 function debug($dane) {
+	echo "<pre>";
     var_dump($dane);
+    echo "</pre>";
 }
 class DBconnect {
 	// połączenie z bazą danych

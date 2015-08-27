@@ -2,11 +2,6 @@
 include 'AnalizaDanychSql.php';
 abstract class AnalizaDanychCore implements AnalizaDanychSql {
 
-	protected $grupa = array(
-			self::POROWNANIE_LOKALIZACJA,
-			self::POROWNANIE_PLEC
-	);
-	
     protected $dbhandler = null;
     protected $dane_db = array();
     protected $dane = array();
@@ -18,11 +13,12 @@ abstract class AnalizaDanychCore implements AnalizaDanychSql {
 
     public function __construct() {
         $this->dbhandler = DBconnect::connect();
-//         $this->przygotuj_dane();
-//         $this->przygotuj_dane_zadania();
-//         $this->przygotuj_dane_obszar();
     }
 
+    /**
+     * Pobiera dane z zapytania sql
+     * @param string $sql
+     */
     protected function pobierz_dane_db($sql) {
         $statement = $this->dbhandler->prepare ( $sql );
         $statement->execute ();
@@ -30,8 +26,33 @@ abstract class AnalizaDanychCore implements AnalizaDanychSql {
         return $dane_db;
     }
 
+    /**
+     * Koduje dane do JSON
+     * @param array $dane
+     */
     protected function koduj_json($dane) {
         return json_encode($dane);
+    }
+
+    /**
+     * Zaokrągla wynik
+     * @param number $liczba
+     */
+    protected function zaokraglij($liczba) {
+    	$precyzja = 2;
+    	return round($liczba, $precyzja);
+    }
+
+    protected function przygotuj_metadane_wykres($metadane) {
+    	if (! isset ( $metadane ['wykres'] )) {
+    		throw new Exception ( "Brak danych wykresu" );
+    	}
+    	$wykresy = $metadane ['wykres'];
+    	$dane_wykresu = array ();
+    	foreach ( $wykresy as $nr_wykresu => $wykres ) {
+    		$dane_wykresu [$nr_wykresu] = new AnalizaDane($wykres);
+    	}
+    	return $dane_wykresu;
     }
 
     /**
@@ -60,45 +81,41 @@ abstract class AnalizaDanychCore implements AnalizaDanychSql {
     		$this->mapuj_dane_obszar($wiersz_danych);
     	}
     }
-    
+
     /**
      * TODO mapuje dane do odpowiedniej architektury tablicy
      */
     protected function mapuj_dane_zadania($wiersz_danych) {
-        $klasa = $wiersz_danych['klasa'];
-        $srednia = $wiersz_danych['srednia_punktow'];
+        $klasa = strtoupper($wiersz_danych['klasa']);
+        $srednia = $this->zaokraglij($wiersz_danych['srednia_punktow']);
         $nr_zadania = $wiersz_danych['nr_zadania'];
         // $klucz określa jaką watość ma dane porównanie np lokalizacja m,w, płeć, c,d, dyslekcja 0,1
         if (!is_null($wiersz_danych[self::POROWNANIE_DYSLEKSJA])) {
             $klucz = $wiersz_danych[self::POROWNANIE_DYSLEKSJA];
             $this->dane_zadania[$nr_zadania][self::POROWNANIE_DYSLEKSJA][$klucz][$klasa] = array(
                     'srednia_punktow' => $srednia,
-                    'klasa' => $klasa
             );
         } else if (!is_null($wiersz_danych[self::POROWNANIE_LOKALIZACJA])) {
             $klucz = $wiersz_danych[self::POROWNANIE_LOKALIZACJA];
             $this->dane_zadania[$nr_zadania][self::POROWNANIE_LOKALIZACJA][$klucz][$klasa] = array(
                     'srednia_punktow' => $srednia,
-                    'klasa' => $klasa
             );
         } else if (!is_null($wiersz_danych[self::POROWNANIE_PLEC])) {
             $klucz = $wiersz_danych[self::POROWNANIE_PLEC];
             $this->dane_zadania[$nr_zadania][self::POROWNANIE_PLEC][$klucz][$klasa] = array(
                     'srednia_punktow' => $srednia,
-                    'klasa' => $klasa
             );
         } else {
             $klucz = 0; // całość danych nie ma porównania, dlatego wszystko znajduje się w pod kluczem
             $this->dane_zadania[$nr_zadania][self::POROWNANIE_CALOSC][$klucz][$klasa] = array(
                     'srednia_punktow' => $srednia,
-                    'klasa' => $klasa
             );
         }
     }
 
     protected function mapuj_dane_obszar($wiersz_danych) {
-        $klasa = $wiersz_danych['klasa'];
-        $srednia = $wiersz_danych['srednia_punktow'];
+        $klasa = strtoupper($wiersz_danych['klasa']);
+        $srednia = $this->zaokraglij($wiersz_danych['srednia_punktow']);
         $obszar = $wiersz_danych['obszar'];
         $umiejetnosc = !is_null($wiersz_danych['umiejetnosc']) ? $wiersz_danych['umiejetnosc'] : 'calosc';
 
@@ -107,25 +124,21 @@ abstract class AnalizaDanychCore implements AnalizaDanychSql {
             $klucz = $wiersz_danych[self::POROWNANIE_DYSLEKSJA];
             $this->dane_obszar[$obszar][$umiejetnosc][self::POROWNANIE_DYSLEKSJA][$klucz][$klasa] = array(
                     'srednia_punktow' => $srednia,
-                    'klasa' => $klasa
             );
         } else if (!is_null($wiersz_danych[self::POROWNANIE_LOKALIZACJA])) {
             $klucz = $wiersz_danych[self::POROWNANIE_LOKALIZACJA];
             $this->dane_obszar[$obszar][$umiejetnosc][self::POROWNANIE_LOKALIZACJA][$klucz][$klasa] = array(
                     'srednia_punktow' => $srednia,
-                    'klasa' => $klasa
             );
         } else if (!is_null($wiersz_danych[self::POROWNANIE_PLEC])) {
             $klucz = $wiersz_danych[self::POROWNANIE_PLEC];
             $this->dane_obszar[$obszar][$umiejetnosc][self::POROWNANIE_PLEC][$klucz][$klasa] = array(
                     'srednia_punktow' => $srednia,
-                    'klasa' => $klasa
             );
         } else {
             $klucz = 0; // całość danych nie ma porównania, dlatego wszystko znajduje się w pod kluczem
             $this->dane_obszar[$obszar][$umiejetnosc][self::POROWNANIE_CALOSC][$klucz][$klasa] = array(
                     'srednia_punktow' => $srednia,
-                    'klasa' => $klasa
             );
         }
     }
@@ -134,32 +147,28 @@ abstract class AnalizaDanychCore implements AnalizaDanychSql {
      * TODO mapuje dane do odpowiedniej architektury tablicy
      */
     protected function mapuj_dane($wiersz_danych) {
-        $klasa = $wiersz_danych['klasa'];
+        $klasa = strtoupper($wiersz_danych['klasa']);
         $this->klasy[] = $klasa;
-        $srednia = $wiersz_danych['srednia_punktow'];
+        $srednia = $this->zaokraglij($wiersz_danych['srednia_punktow']);
         if (!is_null($wiersz_danych[self::POROWNANIE_DYSLEKSJA])) {
             $klucz = $wiersz_danych[self::POROWNANIE_DYSLEKSJA];
             $this->dane[self::POROWNANIE_DYSLEKSJA][$klucz][$klasa] = array(
                     'srednia_punktow' => $srednia,
-                    'klasa' => $klasa
             );
         } else if (!is_null($wiersz_danych[self::POROWNANIE_LOKALIZACJA])) {
             $klucz = $wiersz_danych[self::POROWNANIE_LOKALIZACJA];
             $this->dane[self::POROWNANIE_LOKALIZACJA][$klucz][$klasa] = array(
                     'srednia_punktow' => $srednia,
-                    'klasa' => $klasa
             );
         } else if (!is_null($wiersz_danych[self::POROWNANIE_PLEC])) {
             $klucz = $wiersz_danych[self::POROWNANIE_PLEC];
             $this->dane[self::POROWNANIE_PLEC][$klucz][$klasa] = array(
                     'srednia_punktow' => $srednia,
-                    'klasa' => $klasa
             );
         } else {
             $klucz = 0;
             $this->dane[self::POROWNANIE_CALOSC][$klucz][$klasa] = array(
                     'srednia_punktow' => $srednia,
-                    'klasa' => $klasa
             );
         }
     }
@@ -235,7 +244,7 @@ abstract class AnalizaDanychCore implements AnalizaDanychSql {
     protected function formatuj_do_datatable_zadania($rodzaj_danych, $konfiguracja, $konfig) {
         $rows = array ();
         $table = array ();
-        
+
         if (empty($this->dane_zadania)) {
         	$this->przygotuj_dane_zadania();
         }
@@ -270,5 +279,18 @@ abstract class AnalizaDanychCore implements AnalizaDanychSql {
 
         return $this->koduj_json($table);
     }
+}
+
+class AnalizaDane {
+	public function __construct($dane) {
+		$this->rodzaj_danych = $dane['rodzaj_danych'];
+		$this->grupa = $dane['grupa'];
+		$this->klasy = explode ( ',', $dane ['klasa'] );
+	}
+	public $dane = array();
+	public $klucz = array();
+	public $rodzaj_danych = '';
+	public $grupa = '';
+	public $klasy = array();
 }
 ?>

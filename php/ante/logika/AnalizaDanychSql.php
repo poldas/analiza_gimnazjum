@@ -5,9 +5,13 @@ interface AnalizaDanychSql {
     const POROWNANIE_PLEC = "plec";
     const POROWNANIE_LOKALIZACJA = "lokalizacja";
     const POROWNANIE_DYSLEKSJA = "dysleksja";
+    
     const POROWNANIE_ZADANIA = 'zadania';
     const POROWNANIE_SREDNIA = 'srednia';
+    const POROWNANIE_LATWOSC = 'latwosc';
     const POROWNANIE_OBSZAR = 'obszar';
+    const POROWNANIE_OBSZAR_UMIEJETNOSC = 'obszar_umiejetnosc';
+    const POROWNANIE_UMIEJETNOSC = 'umiejetnosc';
 
     const UNION_ALL_SREDNIA = "
             select sum(we.liczba_punktow)/sum(we.max_punktow) as srednia_punktow,
@@ -523,39 +527,49 @@ interface AnalizaDanychSql {
             group by b.suma, b.plec, b.klasa
             ";
     
-    const SREDNIA_PUNKTOW = "
-            select sum(we.liczba_punktow)/count(distinct we.kod_ucznia) as srednia_punktow,
-                u.klasa
+    
+    const UNION_SREDNIA_PUNKTOW_GRUPY = "
+    		select sum(we.liczba_punktow)/count(distinct we.kod_ucznia) as srednia_punktow,
+                u.klasa,
+    			null dysleksja,
+    			null plec,
+    			null lokalizacja
             from wyniki_egzaminu as we
             left join uczniowie as u
                 on u.kod_ucznia = we.kod_ucznia
             group by u.klasa
             UNION
             select sum(we.liczba_punktow)/count(distinct we.kod_ucznia) as srednia_punktow,
-            'szkola' klasa
+	            'szkola' klasa,
+	    		null dysleksja,
+    			null plec,
+    			null lokalizacja
             from wyniki_egzaminu as we
-            ";
-    
-    const SREDNIA_PUNKTOW_GRUPY_DYSLEKSJA = "
-            select sum(we.liczba_punktow)/count(distinct we.kod_ucznia) as srednia_punktow,
+    		UNION
+    		select sum(we.liczba_punktow)/count(distinct we.kod_ucznia) as srednia_punktow,
                 u.klasa,
-                u.dysleksja
+                u.dysleksja,
+    			null plec,
+    			null lokalizacja
             from wyniki_egzaminu as we
             left join uczniowie as u
                 on u.kod_ucznia = we.kod_ucznia
             group by u.klasa, u.dysleksja
             UNION
             select sum(we.liczba_punktow)/count(distinct we.kod_ucznia) as srednia_punktow,
-            'szkola' klasa,
-            u.dysleksja
+	            'szkola' klasa,
+	            u.dysleksja,
+	    		null plec,
+	    		null lokalizacja
             from wyniki_egzaminu as we
             left join uczniowie as u
                 on u.kod_ucznia = we.kod_ucznia
             group by u.dysleksja
-            ";
-    const SREDNIA_PUNKTOW_GRUPY_LOKALIZACJA = "
+    		UNION
             select sum(we.liczba_punktow)/count(distinct we.kod_ucznia) as srednia_punktow,
                 u.klasa,
+    			null dysleksja,
+    			null plec,
                 u.lokalizacja
             from wyniki_egzaminu as we
             left join uczniowie as u
@@ -563,25 +577,30 @@ interface AnalizaDanychSql {
             group by u.klasa, u.lokalizacja
             UNION
             select sum(we.liczba_punktow)/count(distinct we.kod_ucznia) as srednia_punktow,
-            'szkola' klasa,
-            u.lokalizacja
+	            'szkola' klasa,
+	    		null dysleksja,
+	    		null plec,
+	            u.lokalizacja
             from wyniki_egzaminu as we
             left join uczniowie as u
                 on u.kod_ucznia = we.kod_ucznia
             group by u.lokalizacja
-            ";
-    const SREDNIA_PUNKTOW_GRUPY_PLEC = "
-            select sum(we.liczba_punktow)/count(distinct we.kod_ucznia) as srednia_punktow,
+    		UNION
+    		select sum(we.liczba_punktow)/count(distinct we.kod_ucznia) as srednia_punktow,
                 u.klasa,
-                u.plec
+    			null dysleksja,
+                u.plec,
+    			null lokalizacja
             from wyniki_egzaminu as we
             left join uczniowie as u
                 on u.kod_ucznia = we.kod_ucznia
             group by u.klasa, u.plec
             UNION
             select sum(we.liczba_punktow)/count(distinct we.kod_ucznia) as srednia_punktow,
-            'szkola' klasa,
-            u.plec
+	            'szkola' klasa,
+	    		null dysleksja,
+	            u.plec,
+	    		null lokalizacja
             from wyniki_egzaminu as we
             left join uczniowie as u
                 on u.kod_ucznia = we.kod_ucznia
