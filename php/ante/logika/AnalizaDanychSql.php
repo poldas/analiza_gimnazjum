@@ -5,7 +5,7 @@ interface AnalizaDanychSql {
     const POROWNANIE_PLEC = "plec";
     const POROWNANIE_LOKALIZACJA = "lokalizacja";
     const POROWNANIE_DYSLEKSJA = "dysleksja";
-    
+
     const POROWNANIE_ZADANIA = 'zadania';
     const POROWNANIE_SREDNIA = 'srednia';
     const POROWNANIE_LATWOSC = 'latwosc';
@@ -13,6 +13,7 @@ interface AnalizaDanychSql {
     const POROWNANIE_OBSZAR_UMIEJETNOSC = 'obszar_umiejetnosc';
     const POROWNANIE_UMIEJETNOSC = 'umiejetnosc';
 
+    const KOMENTARZE = "select * from komentarz";
     const UNION_ALL_SREDNIA = "
             select sum(we.liczba_punktow)/sum(we.max_punktow) as srednia_punktow,
                 null dysleksja,
@@ -404,7 +405,7 @@ interface AnalizaDanychSql {
              GROUP by o.obszar, o.umiejetnosc, we.klasa, u.plec
             ";
 
-    const CZESTOSC_WYNIKOW_DYSLEKSJA = "
+    const UNION_CZESTOSC_WYNIKOW = "
             select count(1) as ilosc_wynikow,
                 b.suma,
                 null dysleksja,
@@ -414,7 +415,7 @@ interface AnalizaDanychSql {
             from (
                 select sum(w.liczba_punktow) as suma, w.kod_ucznia
                     from wyniki_egzaminu w
-                    group by w.kod_ucznia) as b 
+                    group by w.kod_ucznia) as b
             group by b.suma
             UNION
             select count(1) as ilosc_wynikow,
@@ -424,13 +425,13 @@ interface AnalizaDanychSql {
                 null plec,
                 b.klasa
             from (
-                select sum(w.liczba_punktow) as suma, 
+                select sum(w.liczba_punktow) as suma,
                     w.kod_ucznia,
                     u.klasa
                     from wyniki_egzaminu w
                     left join uczniowie u
                         on w.kod_ucznia = u.kod_ucznia
-                    group by w.kod_ucznia) as b 
+                    group by w.kod_ucznia) as b
             group by b.suma, b.klasa
             UNION
             select count(1) as ilosc_wynikow,
@@ -440,12 +441,12 @@ interface AnalizaDanychSql {
                 null plec,
                 'szkola' klasa
             from (
-                select sum(w.liczba_punktow) as suma, 
+                select sum(w.liczba_punktow) as suma,
                     u.dysleksja
                     from wyniki_egzaminu w
                     left join uczniowie u
                         on w.kod_ucznia = u.kod_ucznia
-                    group by w.kod_ucznia, u.dysleksja) as b 
+                    group by w.kod_ucznia, u.dysleksja) as b
             group by b.suma, b.dysleksja
             UNION
             select count(1) as ilosc_wynikow,
@@ -455,12 +456,12 @@ interface AnalizaDanychSql {
                 null plec,
                 'szkola' klasa
             from (
-                select sum(w.liczba_punktow) as suma, 
+                select sum(w.liczba_punktow) as suma,
                     u.lokalizacja
                     from wyniki_egzaminu w
                     left join uczniowie u
                         on w.kod_ucznia = u.kod_ucznia
-                    group by w.kod_ucznia, u.lokalizacja) as b 
+                    group by w.kod_ucznia, u.lokalizacja) as b
             group by b.suma, b.lokalizacja
             UNION
             select count(1) as ilosc_wynikow,
@@ -470,12 +471,12 @@ interface AnalizaDanychSql {
                 b.plec,
                 'szkola' klasa
             from (
-                select sum(w.liczba_punktow) as suma, 
+                select sum(w.liczba_punktow) as suma,
                     u.plec
                     from wyniki_egzaminu w
                     left join uczniowie u
                         on w.kod_ucznia = u.kod_ucznia
-                    group by w.kod_ucznia, u.plec) as b 
+                    group by w.kod_ucznia, u.plec) as b
             group by b.suma,b.plec
             UNION
             select count(1) as ilosc_wynikow,
@@ -485,13 +486,13 @@ interface AnalizaDanychSql {
                 null plec,
                 b.klasa
             from (
-                select sum(w.liczba_punktow) as suma, 
+                select sum(w.liczba_punktow) as suma,
                     u.dysleksja,
                     u.klasa
                     from wyniki_egzaminu w
                     left join uczniowie u
                         on w.kod_ucznia = u.kod_ucznia
-                    group by w.kod_ucznia, u.dysleksja) as b 
+                    group by w.kod_ucznia, u.dysleksja) as b
             group by b.suma, b.dysleksja, b.klasa
             UNION
             select count(1) as ilosc_wynikow,
@@ -501,13 +502,13 @@ interface AnalizaDanychSql {
                 null plec,
                 b.klasa
             from (
-                select sum(w.liczba_punktow) as suma, 
+                select sum(w.liczba_punktow) as suma,
                     u.lokalizacja,
                     u.klasa
                     from wyniki_egzaminu w
                     left join uczniowie u
                         on w.kod_ucznia = u.kod_ucznia
-                    group by w.kod_ucznia, u.lokalizacja) as b 
+                    group by w.kod_ucznia, u.lokalizacja) as b
             group by b.suma, b.lokalizacja, b.klasa
             UNION
             select count(1) as ilosc_wynikow,
@@ -517,17 +518,17 @@ interface AnalizaDanychSql {
                 b.plec,
                 b.klasa
             from (
-                select sum(w.liczba_punktow) as suma, 
+                select sum(w.liczba_punktow) as suma,
                     u.plec,
                     u.klasa
                     from wyniki_egzaminu w
                     left join uczniowie u
                         on w.kod_ucznia = u.kod_ucznia
-                    group by w.kod_ucznia, u.plec) as b 
+                    group by w.kod_ucznia, u.plec) as b
             group by b.suma, b.plec, b.klasa
             ";
-    
-    
+
+
     const UNION_SREDNIA_PUNKTOW_GRUPY = "
     		select sum(we.liczba_punktow)/count(distinct we.kod_ucznia) as srednia_punktow,
                 u.klasa,

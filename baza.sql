@@ -391,6 +391,11 @@ INSERT INTO zadanie_obszar_umie VALUES (22, 18, 4);
 INSERT INTO zadanie_obszar_umie VALUES (22, 19, 5);
 INSERT INTO zadanie_obszar_umie VALUES (22, 20, 6);
 
+CREATE TABLE `komentarz` (
+  `id_wykresu` VARCHAR(50),
+  `opis`     TEXT,
+  PRIMARY KEY (`id_wykresu`)
+)ENGINE =InnoDB DEFAULT CHARSET =utf8;
 
 
 # średnia punktów per zadanie dla wszystkich uczniow
