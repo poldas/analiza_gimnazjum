@@ -396,7 +396,7 @@ CREATE TABLE `komentarz` (
   `opis`     TEXT,
   PRIMARY KEY (`id_wykresu`)
 )ENGINE =InnoDB DEFAULT CHARSET =utf8;
-
+Alter table `komentarz` add column czy_wyswietlac bool default true;
 
 # średnia punktów per zadanie dla wszystkich uczniow
 SELECT
