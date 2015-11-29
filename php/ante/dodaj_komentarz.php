@@ -1,14 +1,12 @@
 <?php
 include 'logika/PobierzWyniki.php';
 include 'generatory/DBconnect.php';
-// $analiza = new AnalizaDanych();
-// $get = $_GET;
-// $analiza->pobierz_porownanie($get);
+$opis = strip_tags($_GET['opis']);
+$czy_wyswietlac = $_GET['czy_wyswietlac'] == 'true'? 1 : 0;
 $wyniki = new PobierzWyniki();
-if(!empty($_GET['id_wykresu']) && !empty($_GET['opis'])) {
-    echo $wyniki->dodaj_komentarz(array(
-        'id_wykresu' => $_GET['id_wykresu'],
-        'opis' => strip_tags($_GET['opis'])
-    ));
-}
+echo $wyniki->dodaj_komentarz(array(
+    'id_wykresu' => $_GET['id_wykresu'],
+    'opis' => $opis,
+    'czy_wyswietlac' => $czy_wyswietlac,
+));
 ?>

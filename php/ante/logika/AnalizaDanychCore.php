@@ -29,15 +29,17 @@ abstract class AnalizaDanychCore implements AnalizaDanychSql {
         return $dane_db;
     }
 
-    protected function dodaj_wpis_komentarza($id_wykresu, $opis) {
+    protected function dodaj_wpis_komentarza($id_wykresu, $opis, $czy_wyswietlac) {
         $statement = $this->dbhandler->prepare(
-            "INSERT INTO komentarz(id_wykresu, opis) VALUES(:id_wykresu, :opis)
-                ON DUPLICATE KEY UPDATE id_wykresu= :id_wykresu, opis= :opis");
-        $statement->execute(
+            "INSERT INTO komentarz(id_wykresu, opis, czy_wyswietlac) VALUES(:id_wykresu, :opis, :czy_wyswietlac)
+                ON DUPLICATE KEY UPDATE id_wykresu= :id_wykresu, opis= :opis, czy_wyswietlac= :czy_wyswietlac");
+        $state = $statement->execute(
             array(
                 "id_wykresu" => $id_wykresu,
                 "opis" => $opis,
+                "czy_wyswietlac" => (int)$czy_wyswietlac,
         ));
+        return $state;
     }
 
     /**

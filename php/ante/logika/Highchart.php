@@ -17,13 +17,15 @@ class Highchart {
             foreach ($this->klasy as $key => $klasa) {
                 foreach ($this->konfiguracja_typ_wykresu as $rodzaj_wykresu => $dane) {
                     $id_wykresu = "Obszar".$obszar."typ_".$rodzaj_wykresu."Klasa".$klasa;
-                    $komentarz = isset($this->komentarz[$id_wykresu])? $this->komentarz[$id_wykresu]:"";
+                    $komentarz = $this->pobierz_komentarz($id_wykresu);
                     $nazwa = "Obszar ".$obszar." ".$rodzaj_wykresu." ".$klasa;
+                    $czy_wyswietlac = $this->czy_wyswietlac($id_wykresu);
                     $dane_do_js[] = array(
                         'series' => $this->mapuj_highchart_obszar($obszar, $rodzaj_wykresu, $dane, $kategorie, $klasa),
                         'categories' => $kategorie,
                         'id_wykres' => $id_wykresu,
                         'komentarz' => $komentarz,
+                        'czy_wyswietlac' => $czy_wyswietlac,
                         'nazwa' => $nazwa,
                         'opcje' => array(
                             'max' => 1
@@ -50,18 +52,30 @@ class Highchart {
         return $wyjscie;
     }
 
+    protected function czy_wyswietlac($id_wykresu) {
+        $czy_wyswietlac = isset($this->komentarz[$id_wykresu]['czy_wyswietlac']) ?
+             (int)$this->komentarz[$id_wykresu]['czy_wyswietlac'] : 0;
+        return $czy_wyswietlac;
+    }
+
+    protected function pobierz_komentarz($id_wykresu) {
+        $komentarz = isset($this->komentarz[$id_wykresu]['opis'])? $this->komentarz[$id_wykresu]['opis'] : array('opis' => '');
+        return $komentarz;
+    }
     public function pobierz_srednia_highchart() {
         $dane_do_js = array();
         $kategorie = array_keys($this->klasy);
         foreach ($this->konfiguracja_typ_wykresu as $rodzaj_wykresu => $dane) {
             $id_wykresu = "srednia_typ_".$rodzaj_wykresu."Klasa".$klasa;
-            $komentarz = isset($this->komentarz[$id_wykresu])? $this->komentarz[$id_wykresu]:"";
+            $komentarz = $this->pobierz_komentarz($id_wykresu);
+            $czy_wyswietlac = $this->czy_wyswietlac($id_wykresu);
             $nazwa = "Średnia ".$rodzaj_wykresu." ".$klasa;
             $dane_do_js[] = array(
                 'series' => $this->mapuj_srednia_obszar($rodzaj_wykresu, $dane, $kategorie),
                 'categories' => $kategorie,
                 'id_wykres' => $id_wykresu,
                 'komentarz' => $komentarz,
+                'czy_wyswietlac' => $czy_wyswietlac,
                 'nazwa' => $nazwa,
                 'opcje' => array(
                     'max' => 1
@@ -92,13 +106,15 @@ class Highchart {
         foreach ($this->klasy as $key => $klasa) {
             foreach ($this->konfiguracja_typ_wykresu as $rodzaj_wykresu => $dane) {
                 $id_wykresu = "zadania_typ_".$rodzaj_wykresu."Klasa".$klasa;
-                $komentarz = isset($this->komentarz[$id_wykresu])? $this->komentarz[$id_wykresu]:"";
+                $komentarz = $this->pobierz_komentarz($id_wykresu);
                 $nazwa = "Zadania ".$rodzaj_wykresu." ".$klasa;
+                $czy_wyswietlac = $this->czy_wyswietlac($id_wykresu);
                 $dane_do_js[] = array(
                     'series' => $this->mapuj_highchart_zadania($rodzaj_wykresu, $dane, $kategorie, $klasa),
                     'categories' => $kategorie,
                     'id_wykres' => $id_wykresu,
                     'komentarz' => $komentarz,
+                    'czy_wyswietlac' => $czy_wyswietlac,
                     'nazwa' => $nazwa,
                     'opcje' => array(
                         'max' => 1
@@ -130,13 +146,15 @@ class Highchart {
         foreach ($this->klasy as $key => $klasa) {
             foreach ($this->konfiguracja_typ_wykresu as $rodzaj_wykresu => $dane) {
                 $id_wykresu = "czestos_wynikow_typ_".$rodzaj_wykresu."Klasa".$klasa;
-                $komentarz = isset($this->komentarz[$id_wykresu])? $this->komentarz[$id_wykresu]:"";
+                $komentarz = $this->pobierz_komentarz($id_wykresu);
                 $nazwa = "Częstość wyników ".$rodzaj_wykresu." ".$klasa;
+                $czy_wyswietlac = $this->czy_wyswietlac($id_wykresu);
                 $dane_do_js[] = array(
                     'series' => $this->mapuj_highchart_czestosc_wynikow($rodzaj_wykresu, $dane, $kategorie, $klasa),
                     'categories' => $kategorie,
                     'id_wykres' => $id_wykresu,
                     'komentarz' => $komentarz,
+                    'czy_wyswietlac' => $czy_wyswietlac,
                     'nazwa' => $nazwa,
                     'opcje' => array(
                         'max' => 15

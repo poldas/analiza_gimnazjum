@@ -25,22 +25,30 @@ class PobierzWyniki extends AnalizaDanychCore {
 
 	protected $konfiguracja_typ_wykresu = array(
 		self::POROWNANIE_CALOSC => array('calosc'),
-		self::POROWNANIE_DYSLEKSJA => array("bez dysleksji", "dysleksja"),
-		self::POROWNANIE_LOKALIZACJA => array("miasto", "wieś"),
-		self::POROWNANIE_PLEC => array("chłopcy", "dziewczyny"),
+// 		self::POROWNANIE_DYSLEKSJA => array("bez dysleksji", "dysleksja"),
+// 		self::POROWNANIE_LOKALIZACJA => array("miasto", "wieś"),
+// 		self::POROWNANIE_PLEC => array("chłopcy", "dziewczyny"),
 	);
 
 	public function dodaj_komentarz($dane) {
-	    $id_wykresu = $_GET['id_wykresu'];
-	    $opis = htmlspecialchars($_GET['opis']);
-	    $this->dodaj_wpis_komentarza($id_wykresu, $opis);
+	    $id_wykresu = $dane['id_wykresu'];
+	    $opis = htmlspecialchars($dane['opis']);
+	    $czy_wyswietlac = $dane['czy_wyswietlac'];
+	    $this->dodaj_wpis_komentarza($id_wykresu, $opis, $czy_wyswietlac);
 	    return 1;
 	}
 
 	protected function pobierz_komentarze() {
-	    $this->komentarze = $this->pobierz_dane_db ( self::KOMENTARZE, PDO::FETCH_KEY_PAIR );
-	    foreach ($this->komentarze as $key => $value) {
-	        $this->komentarze[$key] = htmlspecialchars_decode($value);
+	    $komentarze = $this->pobierz_dane_db ( self::KOMENTARZE, PDO::FETCH_ASSOC );
+	    foreach ($komentarze as $key => $value) {
+	        $id_wykresu = $value['id_wykresu'];
+	        $opis = $value['opis'];
+	        $czy_wyswietlac = $value['czy_wyswietlac'];
+	        $this->komentarze[$id_wykresu] = array(
+                'opis' => htmlspecialchars_decode($opis),
+	            'czy_wyswietlac' => $czy_wyswietlac
+            );
+
 	    }
 	}
 
