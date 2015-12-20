@@ -9,20 +9,21 @@ function autoloader($nazwa_klasy) {
 		require ('logika/' . $nazwa_klasy . '.php');
 	}
 }
-spl_autoload_register ( 'autoloader' );
-
-$generator = new GeneratorBuilder ();
-$nazwa_pliku_danych = isset ( $_GET ['name'] ) ? $_GET ['name'] : "";
-if (! $nazwa_pliku_danych) {
-	echo "nie ma danych podaj nazwę pliku w name=<nazwa pliku> w katalogu dane";
-	return;
+spl_autoload_register('autoloader');
+$generator = new GeneratorBuilder();
+$nazwa_pliku_danych = isset($_GET['name'])? $_GET['name'] : "";
+if (!$nazwa_pliku_danych) {
+echo "nie ma danych podaj nazwę pliku w name=<nazwa pliku> w katalogu dane";
+return;
 }
-$generator->ustaw_zrodlo_danych ( '../../dane/' . $nazwa_pliku_danych );
-$generator->generuj_zapytanie_sql ();
-if (isset ( $_GET ['dodaj'] )) {
-	$generator->dodaj_dane_automatycznie ();
+$generator->ustaw_zrodlo_danych('../../dane/'.$nazwa_pliku_danych);
+$generator->generuj_zapytanie_sql();
+echo "wygenerowane";
+if (isset($_GET['dodaj'])) {
+ $generator->dodaj_dane_automatycznie();
+echo "dodane do bazy";
 }
 
 ?>
 </pre>
-KONIEC test.php dsad
+KONIEC test.php

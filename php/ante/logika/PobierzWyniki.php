@@ -29,9 +29,9 @@ class PobierzWyniki extends AnalizaDanychCore {
 	
 	protected $konfiguracja_typ_wykresu = array(
 		self::POROWNANIE_CALOSC => array('calosc'),
-		self::POROWNANIE_DYSLEKSJA => array("bez dysleksji", "dysleksja"),
-		self::POROWNANIE_LOKALIZACJA => array("miasto", "wieś"),
-		self::POROWNANIE_PLEC => array("chłopcy", "dziewczyny"),
+ 		self::POROWNANIE_DYSLEKSJA => array("bez dysleksji", "dysleksja"),
+ 		self::POROWNANIE_LOKALIZACJA => array("miasto", "wieś"),
+ 		self::POROWNANIE_PLEC => array("chłopcy", "dziewczyny"),
 	);
 
 	public function dodaj_komentarz($dane) {

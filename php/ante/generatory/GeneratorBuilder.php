@@ -30,7 +30,7 @@ class GeneratorBuilder {
 
     public function generuj_zapytanie_sql() {
         $this->generator->generuj_zapytanie_sql();
-        echo $this->generator->pobierz_zapytanie_sql();
+	print_r($this->generator->pobierz_zapytanie_sql());
         echo $this->generator->pobierz_zapytanie_sql_obszar();
         echo $this->generator->pobierz_zapytanie_sql_obszary_zadanie();
         echo $this->generator->pobierz_zapytanie_sql_uczniowie();
