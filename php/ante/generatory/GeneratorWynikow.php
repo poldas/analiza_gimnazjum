@@ -119,12 +119,12 @@ class GeneratorWynikow implements IGenerator {
         $dane_zapytania_sql = array();
         $dane_zapytania_sql_uczniowie = array();
         $dane = is_null($dane) ? $this->dane : $dane;
-
         foreach ($dane as $wiersz) {
             $tmp = array();
             // z ciagu "A1,1,2,0,1,0..." tworzy tablicę i usuwa pierwszy element kod ucznia
             $tablica_wiersz = explode(',', $wiersz);
             $kod_ucznia = array_shift($tablica_wiersz);
+            array_pop($tablica_wiersz);
             $lokalizacja = array_pop($tablica_wiersz);
             $dysleksja = array_pop($tablica_wiersz);
             $plec = array_pop($tablica_wiersz);
@@ -138,7 +138,6 @@ class GeneratorWynikow implements IGenerator {
             array_push($tmp, "'".trim($dysleksja)."'");
             array_push($tmp, "'".trim($lokalizacja)."'");
             $dane_zapytania_sql_uczniowie[] = "(".join(',', $tmp).")";
-
             foreach ($tablica_wiersz as $i => $liczba_punktow) {
                 // dane kol1, kol2, kol3 itd. do pojedynczego inserta w nawiasach (kol1, kol2, kol3, ...)
                 // resetowane dla każdego wpisu
@@ -149,6 +148,7 @@ class GeneratorWynikow implements IGenerator {
                 // prosta walidacja
                 $czy_puste_dane = empty($kod_ucznia) || empty($nr_zadania) || $liczba_punktow == '';
                 if ($czy_puste_dane) {
+                	debug($kod_ucznia,$nr_zadania,$liczba_punktow);
                     $err_dane = array('$klasa. $kod_ucznia,$wiersz, $i, $liczba_punktow',$kod_ucznia,$wiersz, $i, $liczba_punktow);
                     print_r($err_dane);
                     return;

@@ -1,6 +1,7 @@
 *~
 .idea/*
 /.settings/
+/node_modules/*
 /.buildpath
 /.project
 .~*
