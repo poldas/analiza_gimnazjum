@@ -244,6 +244,7 @@ class PobierzWyniki extends AnalizaDanychCore {
     	} else {
     		$this->dane_typ[self::POROWNANIE_CALOSC]['calosc'][$klasa] = $srednia;
     	}
+    	
     }
     
     protected function pobierz_dysleksja($wiersz_danych) {

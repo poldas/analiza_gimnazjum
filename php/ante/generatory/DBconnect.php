@@ -8,7 +8,7 @@ class DBconnect {
 	// połączenie z bazą danych
 	const servername = "localhost";
 	const username = "poldas69_analiza";
-	const password = "powieki92";
+	const password = "zaqwsx";
 	const dbname = "poldas69_wyniki2015";
 
 	private static $dbhandler = null;

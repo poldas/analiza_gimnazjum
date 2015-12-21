@@ -46,7 +46,9 @@ class Highchart {
         foreach ($dane as $typ_danych) {
             $srednie = array();
             foreach ($kategorie as $umiejetnosc) {
-                $srednie[] = $this->dane[$rodzaj_wykresu][$obszar][$umiejetnosc][$typ_danych][$klasa];
+            	$srednia_tmp = isset($this->dane[$rodzaj_wykresu][$obszar][$umiejetnosc][$typ_danych][$klasa])?
+            		$this->dane[$rodzaj_wykresu][$obszar][$umiejetnosc][$typ_danych][$klasa] : 0;
+                $srednie[] = $srednia_tmp;
             }
             $wyjscie[] = array(
                 'name' => $typ_danych == 'calosc'? "bez grup" : $typ_danych,
@@ -70,11 +72,11 @@ class Highchart {
         $dane_do_js = array();
         $kategorie = array_keys($this->klasy);
         foreach ($this->konfiguracja_typ_wykresu as $rodzaj_wykresu => $dane) {
-            $id_wykresu = "srednia_typ_".$rodzaj_wykresu."Klasa".$klasa;
+            $id_wykresu = "srednia_typ_".$rodzaj_wykresu."Klasy";
             $komentarz = $this->pobierz_komentarz($id_wykresu);
             $czy_wyswietlac = $this->czy_wyswietlac($id_wykresu);
             $typ_rodzaj_wykresu = $rodzaj_wykresu == 'calosc'? '' : $rodzaj_wykresu;
-            $nazwa = "Średnia ".$typ_rodzaj_wykresu." ".$klasa;
+            $nazwa = "Średnia ".$typ_rodzaj_wykresu;
             $dane_do_js[] = array(
                 'series' => $this->mapuj_srednia_obszar($rodzaj_wykresu, $dane, $kategorie),
                 'categories' => $kategorie,
@@ -97,7 +99,9 @@ class Highchart {
         foreach ($dane as $typ_danych) {
             $srednie = array();
             foreach ($kategorie as $klasa) {
-                $srednie[] = $this->dane[$rodzaj_wykresu][$typ_danych][$klasa];
+            	$srednia_tmp = isset($this->dane[$rodzaj_wykresu][$typ_danych][$klasa])? 
+            		$this->dane[$rodzaj_wykresu][$typ_danych][$klasa] : 0;
+                $srednie[] = $srednia_tmp;
             }
             $wyjscie[] = array(
                 'name' => $typ_danych == 'calosc'? "bez grup" : $typ_danych,
@@ -140,7 +144,9 @@ class Highchart {
         foreach ($dane as $typ_danych) {
             $srednie = array();
             foreach ($kategorie as $nr_zadania) {
-                $srednie[] = $this->dane[$rodzaj_wykresu][$nr_zadania][$typ_danych][$klasa];
+                $srednia_tmp = isset($this->dane[$rodzaj_wykresu][$nr_zadania][$typ_danych][$klasa])?
+                	$this->dane[$rodzaj_wykresu][$nr_zadania][$typ_danych][$klasa] : 0;
+                $srednie[] = $srednia_tmp;
             }
             $wyjscie[] = array(
                 'name' => $typ_danych == 'calosc'? "bez grup" : $typ_danych,
@@ -184,7 +190,9 @@ class Highchart {
         foreach ($dane as $typ_danych) {
             $suma = array();
             foreach ($kategorie as $czestosc_wynikow) {
-                $suma[] = (int)$this->dane[$rodzaj_wykresu][$czestosc_wynikow][$typ_danych][$klasa];
+            	$suma_tmp = isset($this->dane[$rodzaj_wykresu][$czestosc_wynikow][$typ_danych][$klasa])?
+            		(int)$this->dane[$rodzaj_wykresu][$czestosc_wynikow][$typ_danych][$klasa] : 0;
+            	$suma[] = $suma_tmp;
             }
             $wyjscie[] = array(
                 'name' => $typ_danych == 'calosc'? "bez grup" : $typ_danych,
