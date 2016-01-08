@@ -1,7 +1,7 @@
 <?php
 interface AnalizaDanychSql {
 
-    const POROWNANIE_CALOSC = 'calosc';
+    const POROWNANIE_CALOSC = 'całość';
     const POROWNANIE_PLEC = "plec";
     const POROWNANIE_LOKALIZACJA = "lokalizacja";
     const POROWNANIE_DYSLEKSJA = "dysleksja";

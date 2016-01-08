@@ -17,7 +17,7 @@ class Highchart {
         'język' => 14,
         'ortografia' => 15,
         'interpunkcja' => 16,
-        'calosc' => 17
+        'całość' => 17
     );
 
     protected function sort_umiejetnosci($a, $b) {
@@ -40,7 +40,7 @@ class Highchart {
                 foreach ($this->konfiguracja_typ_wykresu as $rodzaj_wykresu => $dane) {
                     $id_wykresu = "Obszar".$obszar."typ_".$rodzaj_wykresu."Klasa".$klasa;
                     $komentarz = $this->pobierz_komentarz($id_wykresu);
-                    $typ_rodzaj_wykresu = $rodzaj_wykresu == 'calosc'? '' : $rodzaj_wykresu;
+                    $typ_rodzaj_wykresu = $rodzaj_wykresu == 'całość'? '' : $rodzaj_wykresu;
                     if ($typ_rodzaj_wykresu == 'plec') {
                         $typ_rodzaj_wykresu = 'płeć';
                     }
@@ -76,7 +76,7 @@ class Highchart {
                 $srednie[] = $srednia_tmp;
             }
             $wyjscie[] = array(
-                'name' => $typ_danych == 'calosc'? "bez grup" : $typ_danych,
+                'name' => $typ_danych == 'całość'? "bez grup" : $typ_danych,
                 'data' => $srednie
             );
         }
@@ -101,7 +101,7 @@ class Highchart {
             $id_wykresu = "srednia_typ_".$rodzaj_wykresu."Klasy";
             $komentarz = $this->pobierz_komentarz($id_wykresu);
             $czy_wyswietlac = $this->czy_wyswietlac($id_wykresu);
-            $typ_rodzaj_wykresu = $rodzaj_wykresu == 'calosc'? '' : $rodzaj_wykresu;
+            $typ_rodzaj_wykresu = $rodzaj_wykresu == 'całość'? '' : $rodzaj_wykresu;
             if ($typ_rodzaj_wykresu == 'plec') {
                 $typ_rodzaj_wykresu = 'płeć';
             }
@@ -133,7 +133,7 @@ class Highchart {
                 $srednie[] = $srednia_tmp;
             }
             $wyjscie[] = array(
-                'name' => $typ_danych == 'calosc'? "bez grup" : $typ_danych,
+                'name' => $typ_danych == 'całość'? "bez grup" : $typ_danych,
                 'data' => $srednie
             );
         }
@@ -147,7 +147,7 @@ class Highchart {
             $id_wykresu = "srednia_grupy_typ_".$rodzaj_wykresu."Klasy";
             $komentarz = $this->pobierz_komentarz($id_wykresu);
             $czy_wyswietlac = $this->czy_wyswietlac($id_wykresu);
-            $typ_rodzaj_wykresu = $rodzaj_wykresu == 'calosc'? '' : $rodzaj_wykresu;
+            $typ_rodzaj_wykresu = $rodzaj_wykresu == 'całość'? '' : $rodzaj_wykresu;
             if ($typ_rodzaj_wykresu == 'plec') {
                 $typ_rodzaj_wykresu = 'płeć';
             }
@@ -161,8 +161,7 @@ class Highchart {
                 'opisY' => 'Średnia',
                 'czy_wyswietlac' => $czy_wyswietlac,
                 'nazwa' => $nazwa,
-                'opcje' => array(
-                )
+                'opcje' => array()
             );
         }
         return $dane_do_js;
@@ -175,7 +174,7 @@ class Highchart {
             foreach ($this->konfiguracja_typ_wykresu as $rodzaj_wykresu => $dane) {
                 $id_wykresu = "zadania_typ_".$rodzaj_wykresu."Klasa".$klasa;
                 $komentarz = $this->pobierz_komentarz($id_wykresu);
-                $typ_rodzaj_wykresu = $rodzaj_wykresu == 'calosc'? '' : $rodzaj_wykresu;
+                $typ_rodzaj_wykresu = $rodzaj_wykresu == 'całość'? '' : $rodzaj_wykresu;
                 if ($typ_rodzaj_wykresu == 'plec') {
                     $typ_rodzaj_wykresu = 'płeć';
                 }
@@ -209,7 +208,7 @@ class Highchart {
                 $srednie[] = $srednia_tmp;
             }
             $wyjscie[] = array(
-                'name' => $typ_danych == 'calosc'? "bez grup" : $typ_danych,
+                'name' => $typ_danych == 'całość'? "bez grup" : $typ_danych,
                 'data' => $srednie
             );
         }
@@ -223,7 +222,7 @@ class Highchart {
             foreach ($this->konfiguracja_typ_wykresu as $rodzaj_wykresu => $dane) {
                 $id_wykresu = "czestos_wynikow_typ_".$rodzaj_wykresu."Klasa".$klasa;
                 $komentarz = $this->pobierz_komentarz($id_wykresu);
-                $typ_rodzaj_wykresu = $rodzaj_wykresu == 'calosc'? '' : $rodzaj_wykresu;
+                $typ_rodzaj_wykresu = $rodzaj_wykresu == 'całość'? '' : $rodzaj_wykresu;
                 if ($typ_rodzaj_wykresu == 'plec') {
                     $typ_rodzaj_wykresu = 'płeć';
                 }
@@ -258,7 +257,7 @@ class Highchart {
             	$suma[] = $suma_tmp;
             }
             $wyjscie[] = array(
-                'name' => $typ_danych == 'calosc'? "bez grup" : $typ_danych,
+                'name' => $typ_danych == 'całość'? "bez grup" : $typ_danych,
                 'data' => $suma
             );
         }

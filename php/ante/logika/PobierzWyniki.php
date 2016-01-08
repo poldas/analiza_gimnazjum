@@ -30,7 +30,7 @@ class PobierzWyniki extends AnalizaDanychCore {
 	const LOKALIZACJA_MIASTO= 'm';
 	
 	protected $konfiguracja_typ_wykresu = array(
-		self::POROWNANIE_CALOSC => array('calosc'),
+		self::POROWNANIE_CALOSC => array('całość'),
  		self::POROWNANIE_DYSLEKSJA => array("bez dysleksji", "dysleksja"),
  		self::POROWNANIE_LOKALIZACJA => array("miasto", "wieś"),
  		self::POROWNANIE_PLEC => array("chłopcy", "dziewczyny"),
@@ -156,6 +156,9 @@ class PobierzWyniki extends AnalizaDanychCore {
 
     protected function mapuj_dane_czestosc($wiersz_danych) {
         $klasa = strtoupper($wiersz_danych['klasa']);
+        if($klasa == 'SZKOLA') {
+            $klasa = 'Szkoła';
+        }
         $this->klasy[$klasa] = $klasa;
         $ilosc_wynikow = $wiersz_danych['ilosc_wynikow'];
         $suma = $wiersz_danych['suma'];
@@ -171,12 +174,15 @@ class PobierzWyniki extends AnalizaDanychCore {
             $plec = $this->pobierz_plec($wiersz_danych);
             $this->dane_czestosc_wynikow[self::POROWNANIE_PLEC][$suma][$plec][$klasa] = $ilosc_wynikow;
         } else {
-            $this->dane_czestosc_wynikow[self::POROWNANIE_CALOSC][$suma]['calosc'][$klasa] = $ilosc_wynikow;
+            $this->dane_czestosc_wynikow[self::POROWNANIE_CALOSC][$suma]['całość'][$klasa] = $ilosc_wynikow;
         }
     }
 
     protected function mapuj_dane_zadania($wiersz_danych) {
         $klasa = strtoupper($wiersz_danych['klasa']);
+        if($klasa == 'SZKOLA') {
+            $klasa = 'Szkoła';
+        }
         $this->klasy[$klasa] = $klasa;
         $srednia = $this->zaokraglij($wiersz_danych['srednia_punktow']);
         $nr_zadania = $wiersz_danych['nr_zadania'];
@@ -192,16 +198,19 @@ class PobierzWyniki extends AnalizaDanychCore {
             $plec = $this->pobierz_plec($wiersz_danych);
             $this->dane_zadania[self::POROWNANIE_PLEC][$nr_zadania][$plec][$klasa] = $srednia;
         } else {
-            $this->dane_zadania[self::POROWNANIE_CALOSC][$nr_zadania]['calosc'][$klasa] = $srednia;
+            $this->dane_zadania[self::POROWNANIE_CALOSC][$nr_zadania]['całość'][$klasa] = $srednia;
         }
     }
 
     protected function mapuj_dane_obszar($wiersz_danych) {
         $klasa = strtoupper($wiersz_danych['klasa']);
+        if($klasa == 'SZKOLA') {
+            $klasa = 'Szkoła';
+        }
         $this->klasy[$klasa] = $klasa;
         $srednia = $this->zaokraglij($wiersz_danych['srednia_punktow']);
         $obszar = $wiersz_danych['obszar'];
-        $umiejetnosc = !is_null($wiersz_danych['umiejetnosc']) ? $wiersz_danych['umiejetnosc'] : 'calosc';
+        $umiejetnosc = !is_null($wiersz_danych['umiejetnosc']) ? $wiersz_danych['umiejetnosc'] : 'całość';
         $this->obszary[$obszar][$umiejetnosc] = $umiejetnosc;
 
         if (!is_null($wiersz_danych[self::POROWNANIE_DYSLEKSJA])) {
@@ -214,12 +223,15 @@ class PobierzWyniki extends AnalizaDanychCore {
             $plec = $this->pobierz_plec($wiersz_danych);
             $this->dane_typ_obszar[self::POROWNANIE_PLEC][$obszar][$umiejetnosc][$plec][$klasa] = $srednia;
         } else {
-            $this->dane_typ_obszar[self::POROWNANIE_CALOSC][$obszar][$umiejetnosc]['calosc'][$klasa] = $srednia;
+            $this->dane_typ_obszar[self::POROWNANIE_CALOSC][$obszar][$umiejetnosc]['całość'][$klasa] = $srednia;
         }
     }
 
     protected function mapuj_srednia_grupy($wiersz_danych) {
         $klasa = strtoupper($wiersz_danych['klasa']);
+        if($klasa == 'SZKOLA') {
+            $klasa = 'Szkoła';
+        }
         $this->klasy[$klasa] = $klasa;
         $srednia = $this->zaokraglij($wiersz_danych['srednia_punktow']);
         if (!is_null($wiersz_danych[self::POROWNANIE_DYSLEKSJA])) {
@@ -232,12 +244,15 @@ class PobierzWyniki extends AnalizaDanychCore {
             $plec = $this->pobierz_plec($wiersz_danych);
             $this->dane_typ_grupy[self::POROWNANIE_PLEC][$plec][$klasa] = $srednia;
         } else {
-            $this->dane_typ_grupy[self::POROWNANIE_CALOSC]['calosc'][$klasa] = $srednia;
+            $this->dane_typ_grupy[self::POROWNANIE_CALOSC]['całość'][$klasa] = $srednia;
         }
     }
 
     protected function mapuj_srednia($wiersz_danych) {
     	$klasa = strtoupper($wiersz_danych['klasa']);
+        if($klasa == 'SZKOLA') {
+            $klasa = 'Szkoła';
+        }
     	$this->klasy[$klasa] = $klasa;
     	$srednia = $this->zaokraglij($wiersz_danych['srednia_punktow']);
     	if (!is_null($wiersz_danych[self::POROWNANIE_DYSLEKSJA])) {
@@ -250,7 +265,7 @@ class PobierzWyniki extends AnalizaDanychCore {
     		$plec = $this->pobierz_plec($wiersz_danych);
     		$this->dane_typ[self::POROWNANIE_PLEC][$plec][$klasa] = $srednia;
     	} else {
-    		$this->dane_typ[self::POROWNANIE_CALOSC]['calosc'][$klasa] = $srednia;
+    		$this->dane_typ[self::POROWNANIE_CALOSC]['całość'][$klasa] = $srednia;
     	}
     	
     }
