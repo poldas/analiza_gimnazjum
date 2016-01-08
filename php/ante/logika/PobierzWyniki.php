@@ -7,6 +7,8 @@ class PobierzWyniki extends AnalizaDanychCore {
 
 	protected $dane_typ = array();
 
+    protected $dane_typ_grupy = array();
+
 	protected $dane_typ_obszar = array();
 
 	protected $dane_zadania = array();
@@ -58,11 +60,13 @@ class PobierzWyniki extends AnalizaDanychCore {
 
 	public function pobierz() {
 	    $srednia = $this->pobierz_srednia_highchart();
+        $srednia_grupy = $this->pobierz_srednia_grupy_highchart();
 	    $obszary = $this->pobierz_obszar_highchart();
 	    $zadania = $this->pobierz_zadania_highchart();
 	    $czestosc = $this->pobierz_czestosc_highchart();
-	    $wynik = array_merge($srednia, $obszary, $czestosc, $zadania);
+	    $wynik = array_merge($srednia, $srednia_grupy, $obszary, $czestosc, $zadania);
 	    return json_encode($wynik);
+
 	}
 
     public function pobierz_obszar_highchart() {
@@ -106,15 +110,16 @@ class PobierzWyniki extends AnalizaDanychCore {
         $dane_do_js = array();
         $highchart = new Highchart();
         $highchart->ustaw_klasy($this->klasy)
-        ->ustaw_dane($this->dane_typ)
-        ->ustaw_komentarz($this->komentarze)
-        ->ustaw_konfiguracje($this->konfiguracja_typ_wykresu);
-        return $highchart->pobierz_srednia_highchart();
+            ->ustaw_dane($this->dane_typ_grupy)
+            ->ustaw_komentarz($this->komentarze)
+            ->ustaw_konfiguracje($this->konfiguracja_typ_wykresu);
+        return $highchart->pobierz_srednia_highchart_grupy();
     }
 
     public function pobierz_zadania_highchart() {
         $this->pobierz_komentarze();
         $dane_db = $this->pobierz_dane_db ( self::UNION_ALL_SREDNIA_ZADANIA, PDO::FETCH_ASSOC);
+        uasort($dane_db, array($this, 'sort_zadania')); // sortowanie wg numerów zadań
         foreach ($dane_db as $wiersz_danych) {
             $this->mapuj_dane_zadania($wiersz_danych);
         }
@@ -129,6 +134,9 @@ class PobierzWyniki extends AnalizaDanychCore {
         return $highchart->pobierz_zadania_highchart();
     }
 
+    protected function sort_zadania($a, $b) {
+        return $a['nr_zadania'] >= $b['nr_zadania'];
+    }
     public function pobierz_czestosc_highchart() {
         $this->pobierz_komentarze();
         $dane_db = $this->pobierz_dane_db ( self::UNION_CZESTOSC_WYNIKOW, PDO::FETCH_ASSOC);
@@ -216,15 +224,15 @@ class PobierzWyniki extends AnalizaDanychCore {
         $srednia = $this->zaokraglij($wiersz_danych['srednia_punktow']);
         if (!is_null($wiersz_danych[self::POROWNANIE_DYSLEKSJA])) {
             $dysleksja = $this->pobierz_dysleksja($wiersz_danych);
-            $this->dane_typ[self::POROWNANIE_DYSLEKSJA][$dysleksja][$klasa] = $srednia;
+            $this->dane_typ_grupy[self::POROWNANIE_DYSLEKSJA][$dysleksja][$klasa] = $srednia;
         } else if (!is_null($wiersz_danych[self::POROWNANIE_LOKALIZACJA])) {
             $lokalizacja = $this->pobierz_lokalizacja($wiersz_danych);
-            $this->dane_typ[self::POROWNANIE_LOKALIZACJA][$lokalizacja][$klasa] = $srednia;
+            $this->dane_typ_grupy[self::POROWNANIE_LOKALIZACJA][$lokalizacja][$klasa] = $srednia;
         } else if (!is_null($wiersz_danych[self::POROWNANIE_PLEC])) {
             $plec = $this->pobierz_plec($wiersz_danych);
-            $this->dane_typ[self::POROWNANIE_PLEC][$plec][$klasa] = $srednia;
+            $this->dane_typ_grupy[self::POROWNANIE_PLEC][$plec][$klasa] = $srednia;
         } else {
-            $this->dane_typ[self::POROWNANIE_CALOSC]['calosc'][$klasa] = $srednia;
+            $this->dane_typ_grupy[self::POROWNANIE_CALOSC]['calosc'][$klasa] = $srednia;
         }
     }
 

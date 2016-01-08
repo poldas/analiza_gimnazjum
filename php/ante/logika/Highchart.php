@@ -10,15 +10,40 @@ class Highchart {
     private $konfiguracja_typ_wykresu = array();
     private $czestosc_wynikow = array();
 
+    private $tablica_sortowania_obszarIII = array(
+        'treść' => 11,
+        'segmentacja' => 12,
+        'styl' => 13,
+        'język' => 14,
+        'ortografia' => 15,
+        'interpunkcja' => 16,
+        'calosc' => 17
+    );
+
+    protected function sort_umiejetnosci($a, $b) {
+        $a_map = strtolower($a);
+        $b_map = strtolower($b);
+        $a = isset($this->tablica_sortowania_obszarIII[$a_map])? $this->tablica_sortowania_obszarIII[$a_map] : (float)$a;
+        $b = isset($this->tablica_sortowania_obszarIII[$b_map])? $this->tablica_sortowania_obszarIII[$b_map] : (float)$b;
+        return $a >= $b;
+    }
+
     public function pobierz_obszar_highchart() {
         $dane_do_js = array();
         foreach ($this->obszary as $obszar => $umiejetnosci) {
             $kategorie = array_keys($umiejetnosci);
+            if ($obszar == 'III') {
+                uasort($kategorie, array($this, 'sort_umiejetnosci'));
+                $kategorie = array_values($kategorie);
+            }
             foreach ($this->klasy as $key => $klasa) {
                 foreach ($this->konfiguracja_typ_wykresu as $rodzaj_wykresu => $dane) {
                     $id_wykresu = "Obszar".$obszar."typ_".$rodzaj_wykresu."Klasa".$klasa;
                     $komentarz = $this->pobierz_komentarz($id_wykresu);
                     $typ_rodzaj_wykresu = $rodzaj_wykresu == 'calosc'? '' : $rodzaj_wykresu;
+                    if ($typ_rodzaj_wykresu == 'plec') {
+                        $typ_rodzaj_wykresu = 'płeć';
+                    }
                     $typ_klasa = $klasa == "SZKOLA"? " Szkoła" : " klasa ".$klasa;
                     $nazwa = "Obszar ".$obszar." ".$typ_rodzaj_wykresu.$typ_klasa;
                     $czy_wyswietlac = $this->czy_wyswietlac($id_wykresu);
@@ -68,6 +93,7 @@ class Highchart {
         $komentarz = isset($this->komentarz[$id_wykresu]['opis'])? $this->komentarz[$id_wykresu]['opis'] : array('opis' => '');
         return $komentarz;
     }
+
     public function pobierz_srednia_highchart() {
         $dane_do_js = array();
         $kategorie = array_keys($this->klasy);
@@ -76,7 +102,10 @@ class Highchart {
             $komentarz = $this->pobierz_komentarz($id_wykresu);
             $czy_wyswietlac = $this->czy_wyswietlac($id_wykresu);
             $typ_rodzaj_wykresu = $rodzaj_wykresu == 'calosc'? '' : $rodzaj_wykresu;
-            $nazwa = "Średnia ".$typ_rodzaj_wykresu;
+            if ($typ_rodzaj_wykresu == 'plec') {
+                $typ_rodzaj_wykresu = 'płeć';
+            }
+            $nazwa = "Średnia w % ".$typ_rodzaj_wykresu;
             $dane_do_js[] = array(
                 'series' => $this->mapuj_srednia_obszar($rodzaj_wykresu, $dane, $kategorie),
                 'categories' => $kategorie,
@@ -111,6 +140,34 @@ class Highchart {
         return $wyjscie;
     }
 
+    public function pobierz_srednia_highchart_grupy() {
+        $dane_do_js = array();
+        $kategorie = array_keys($this->klasy);
+        foreach ($this->konfiguracja_typ_wykresu as $rodzaj_wykresu => $dane) {
+            $id_wykresu = "srednia_grupy_typ_".$rodzaj_wykresu."Klasy";
+            $komentarz = $this->pobierz_komentarz($id_wykresu);
+            $czy_wyswietlac = $this->czy_wyswietlac($id_wykresu);
+            $typ_rodzaj_wykresu = $rodzaj_wykresu == 'calosc'? '' : $rodzaj_wykresu;
+            if ($typ_rodzaj_wykresu == 'plec') {
+                $typ_rodzaj_wykresu = 'płeć';
+            }
+            $nazwa = "Średnia w pkt. ".$typ_rodzaj_wykresu;
+            $dane_do_js[] = array(
+                'series' => $this->mapuj_srednia_obszar($rodzaj_wykresu, $dane, $kategorie),
+                'categories' => $kategorie,
+                'id_wykres' => $id_wykresu,
+                'komentarz' => $komentarz,
+                'rodzaj_wykresu' => "Klasy + szkoła",
+                'opisY' => 'Średnia',
+                'czy_wyswietlac' => $czy_wyswietlac,
+                'nazwa' => $nazwa,
+                'opcje' => array(
+                )
+            );
+        }
+        return $dane_do_js;
+    }
+
     public function pobierz_zadania_highchart() {
         $dane_do_js = array();
         $kategorie = array_keys($this->zadania);
@@ -119,6 +176,9 @@ class Highchart {
                 $id_wykresu = "zadania_typ_".$rodzaj_wykresu."Klasa".$klasa;
                 $komentarz = $this->pobierz_komentarz($id_wykresu);
                 $typ_rodzaj_wykresu = $rodzaj_wykresu == 'calosc'? '' : $rodzaj_wykresu;
+                if ($typ_rodzaj_wykresu == 'plec') {
+                    $typ_rodzaj_wykresu = 'płeć';
+                }
                 $nazwa = "Zadania ".$typ_rodzaj_wykresu." ".$klasa;
                 $czy_wyswietlac = $this->czy_wyswietlac($id_wykresu);
                 $dane_do_js[] = array(
@@ -164,6 +224,9 @@ class Highchart {
                 $id_wykresu = "czestos_wynikow_typ_".$rodzaj_wykresu."Klasa".$klasa;
                 $komentarz = $this->pobierz_komentarz($id_wykresu);
                 $typ_rodzaj_wykresu = $rodzaj_wykresu == 'calosc'? '' : $rodzaj_wykresu;
+                if ($typ_rodzaj_wykresu == 'plec') {
+                    $typ_rodzaj_wykresu = 'płeć';
+                }
                 $nazwa = "Częstość wyników ".$typ_rodzaj_wykresu." ".$klasa;
                 $czy_wyswietlac = $this->czy_wyswietlac($id_wykresu);
                 $dane_do_js[] = array(
